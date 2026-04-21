@@ -61,14 +61,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.040628344, g: 0.7830189, b: 0.63410604, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: -5107093177803117624, guid: b5179c22d2ffdf34f9fd1258e1733c00, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -306,6 +306,7 @@ MonoBehaviour:
   image: {fileID: 4423067634205881236}
   parentAfterDrag: {fileID: 0}
   wasDroppedOnValidSpot: 0
+  hasBeenPlaced: 0
   prefab: {fileID: 3497069656475229030}
   isSource: 1
 --- !u!1 &4297375459534693154
