@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
 {
     public Image image;
     private RectTransform rectTransform;
@@ -14,29 +14,50 @@ public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     public GameObject prefab;
     public bool isSource = true;
 
+    [Header("Node Info")]
+    public NodeData nodeData;
+
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
     }
 
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        // Only open inspector for nodes placed on the grid
+        if (!hasBeenPlaced) return;
+
+        NodeInspectorPanel inspector = FindObjectOfType<NodeInspectorPanel>();
+        if (inspector != null)
+        {
+            PlacementSpot spot = GetComponentInParent<PlacementSpot>();
+            inspector.Show(this, spot);
+        }
+    }
+
     public void OnBeginDrag(PointerEventData eventData)
     {
-        // Spawn replacement if this is a source item
+        // Close inspector if dragging a placed node
+        NodeInspectorPanel inspector = FindObjectOfType<NodeInspectorPanel>();
+        if (inspector != null) inspector.Hide();
+
+        // Spawn a fresh replacement in the taskbar slot
         if (isSource)
         {
             GameObject replacement = Instantiate(prefab, transform.parent);
             replacement.transform.SetSiblingIndex(transform.GetSiblingIndex());
-            replacement.GetComponent<DragableItem>().isSource = true;
+
+            DragableItem rep = replacement.GetComponent<DragableItem>();
+            rep.isSource = true;
+            rep.hasBeenPlaced = false; // Ensure replacement never thinks it's placed
 
             isSource = false;
         }
 
         wasDroppedOnValidSpot = false;
-
-        // Store current parent as fallback location
         parentAfterDrag = transform.parent;
 
-        // Move to top canvas layer for proper dragging
+        // Bring to front for dragging
         transform.SetParent(transform.root);
         transform.SetAsLastSibling();
 
@@ -51,7 +72,6 @@ public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             eventData.pressEventCamera,
             out Vector2 localPoint
         );
-
         rectTransform.localPosition = localPoint;
     }
 
@@ -59,24 +79,22 @@ public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     {
         image.raycastTarget = true;
 
-        // Invalid drop handling
         if (!wasDroppedOnValidSpot)
         {
             if (hasBeenPlaced)
             {
-                // Return to previous valid position
+                // Return to its grid spot
                 transform.SetParent(parentAfterDrag);
             }
             else
             {
-                // Destroy if never placed before
+                // Destroy if it never made it to the grid
                 Destroy(gameObject);
             }
-
             return;
         }
 
-        // Valid placement
+        // Snap into the valid placement spot
         transform.SetParent(parentAfterDrag);
     }
 }
