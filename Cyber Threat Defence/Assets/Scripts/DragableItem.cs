@@ -11,6 +11,9 @@ public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     [HideInInspector] public bool wasDroppedOnValidSpot = false;
     [HideInInspector] public bool hasBeenPlaced = false;
 
+    public int CurrentHealth { get; private set; }
+    public bool IsCompromised { get; private set; }
+
     public GameObject prefab;
     public bool isSource = true;
 
@@ -20,6 +23,22 @@ public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
+    }
+
+    public void InitialiseHealth()
+    {
+        if (nodeData != null)
+            CurrentHealth = nodeData.maxHealth;
+    }
+
+    public void SetCompromised(bool value)
+    {
+        IsCompromised = value;
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.Instance?.UnregisterNode(this);
     }
 
     public void OnPointerClick(PointerEventData eventData)

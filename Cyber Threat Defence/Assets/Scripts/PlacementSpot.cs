@@ -6,14 +6,29 @@ public class PlacementSpot : MonoBehaviour, IDropHandler, IPointerClickHandler
     public void OnDrop(PointerEventData eventData)
     {
         if (eventData.pointerDrag == null) return;
-
         if (transform.childCount > 0) return;
+        if (!eventData.pointerDrag.TryGetComponent(out DragableItem dragableItem)) return;
 
-        if (eventData.pointerDrag.TryGetComponent(out DragableItem dragableItem))
+        bool isFreshPlacement = !dragableItem.hasBeenPlaced;
+
+        if (isFreshPlacement && dragableItem.nodeData != null)
         {
-            dragableItem.parentAfterDrag = transform;
-            dragableItem.wasDroppedOnValidSpot = true;
+            if (GameManager.Instance != null && !GameManager.Instance.CanAfford(dragableItem.nodeData.cost))
+            {
+                Debug.Log("Cannot afford " + dragableItem.nodeData.nodeName);
+                return;
+            }
+            GameManager.Instance?.DeductBalance(dragableItem.nodeData.cost);
+        }
+
+        dragableItem.parentAfterDrag = transform;
+        dragableItem.wasDroppedOnValidSpot = true;
+
+        if (isFreshPlacement)
+        {
             dragableItem.hasBeenPlaced = true;
+            dragableItem.InitialiseHealth();
+            GameManager.Instance?.RegisterNode(dragableItem);
         }
     }
 

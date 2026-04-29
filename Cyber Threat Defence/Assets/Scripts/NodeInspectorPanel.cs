@@ -56,7 +56,7 @@ public class NodeInspectorPanel : MonoBehaviour
             nodeName.text        = node.nodeData.nodeName;
             nodeLevel.text       = "Tier: " + node.nodeData.tier;
             nodeDescription.text = node.nodeData.description;
-            ShowIconForType(node.nodeData.nodeName);
+            ShowIconForType(node.nodeData.nodeType);
         }
         else
         {
@@ -83,23 +83,28 @@ public class NodeInspectorPanel : MonoBehaviour
         if (iconFirewall) iconFirewall.SetActive(false);
     }
 
-    private void ShowIconForType(string name)
+    private void ShowIconForType(NodeType type)
     {
-        switch (name)
+        switch (type)
         {
-            case "Service":  if (iconService)  iconService.SetActive(true);  break;
-            case "Server":   if (iconServer)   iconServer.SetActive(true);   break;
-            case "Database": if (iconDatabase) iconDatabase.SetActive(true); break;
-            case "Firewall": if (iconFirewall) iconFirewall.SetActive(true); break;
-            default:
-                if (iconService) iconService.SetActive(true);
-                break;
+            case NodeType.Service:  if (iconService)  iconService.SetActive(true);  break;
+            case NodeType.Server:   if (iconServer)   iconServer.SetActive(true);   break;
+            case NodeType.Database: if (iconDatabase) iconDatabase.SetActive(true); break;
+            case NodeType.Firewall: if (iconFirewall) iconFirewall.SetActive(true); break;
         }
     }
 
     private void OnSellClicked()
     {
         if (currentNode == null) return;
+
+        if (currentNode.nodeData != null)
+        {
+            int refund = Mathf.RoundToInt(currentNode.nodeData.cost * 0.6f);
+            GameManager.Instance?.AddBalance(refund);
+        }
+
+        GameManager.Instance?.UnregisterNode(currentNode);
         Destroy(currentNode.gameObject);
         Hide();
     }

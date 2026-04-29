@@ -13,6 +13,11 @@ MonoBehaviour:
   m_Name: NodeData_Firewall
   m_EditorClassIdentifier: Assembly-CSharp::NodeData
   nodeName: Firewall
-  tier: x
-  description: Firewall is blah blah blah
+  nodeType: 3
+  tier: 1
+  description: Reduces breach probability for all connected nodes. Carries a per-second maintenance cost that scales with nodes protected.
   icon: {fileID: -4727848491673685825, guid: 0847448bd18dda94fa1062152e40b896, type: 3}
+  cost: 175
+  revenuePerSecond: 0
+  maxHealth: 200
+  securityLevel: 4
