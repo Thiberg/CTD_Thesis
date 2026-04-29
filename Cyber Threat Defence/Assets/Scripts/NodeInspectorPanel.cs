@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 using TMPro;
 
 public class NodeInspectorPanel : MonoBehaviour
@@ -24,12 +25,23 @@ public class NodeInspectorPanel : MonoBehaviour
 
     private DragableItem currentNode;
     private PlacementSpot currentSpot;
+    private RectTransform panelRect;
 
     private void Start()
     {
+        panelRect = panelRoot.GetComponent<RectTransform>();
         panelRoot.SetActive(false);
         sellButton.onClick.AddListener(OnSellClicked);
         upgradeButton.onClick.AddListener(OnUpgradeClicked);
+    }
+
+    private void Update()
+    {
+        if (!panelRoot.activeSelf) return;
+        if (!Mouse.current.leftButton.wasPressedThisFrame) return;
+
+        if (!RectTransformUtility.RectangleContainsScreenPoint(panelRect, Mouse.current.position.ReadValue(), null))
+            Hide();
     }
 
     public void Show(DragableItem node, PlacementSpot spot)

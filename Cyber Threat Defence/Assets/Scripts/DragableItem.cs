@@ -24,10 +24,9 @@ public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        // Only open inspector for nodes placed on the grid
         if (!hasBeenPlaced) return;
 
-        NodeInspectorPanel inspector = FindObjectOfType<NodeInspectorPanel>();
+        NodeInspectorPanel inspector = FindObjectOfType<NodeInspectorPanel>(true);
         if (inspector != null)
         {
             PlacementSpot spot = GetComponentInParent<PlacementSpot>();
@@ -37,8 +36,7 @@ public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        // Close inspector if dragging a placed node
-        NodeInspectorPanel inspector = FindObjectOfType<NodeInspectorPanel>();
+        NodeInspectorPanel inspector = FindObjectOfType<NodeInspectorPanel>(true);
         if (inspector != null) inspector.Hide();
 
         // Spawn a fresh replacement in the taskbar slot

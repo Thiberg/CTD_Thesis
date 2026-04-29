@@ -25,7 +25,7 @@ public class PlacementSpot : MonoBehaviour, IDropHandler, IPointerClickHandler
     if (node == null) return;
     if (!node.hasBeenPlaced) return;
 
-    NodeInspectorPanel inspector = FindObjectOfType<NodeInspectorPanel>();
+    NodeInspectorPanel inspector = FindObjectOfType<NodeInspectorPanel>(true);
     if (inspector != null)
     {
         inspector.Show(node, this);
