@@ -39,6 +39,7 @@ public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     private void OnDestroy()
     {
         GameManager.Instance?.UnregisterNode(this);
+        CredentialManager.Instance?.UnregisterNode(this);
     }
 
     public void OnPointerClick(PointerEventData eventData)

@@ -29,6 +29,7 @@ public class PlacementSpot : MonoBehaviour, IDropHandler, IPointerClickHandler
             dragableItem.hasBeenPlaced = true;
             dragableItem.InitialiseHealth();
             GameManager.Instance?.RegisterNode(dragableItem);
+            CredentialPopup.Instance?.Show(dragableItem);
         }
     }
 
