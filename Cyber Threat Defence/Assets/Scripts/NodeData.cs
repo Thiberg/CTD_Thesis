@@ -14,6 +14,7 @@ public class NodeData : ScriptableObject
     [Header("Economy")]
     public int cost;
     public float revenuePerSecond;
+    public float upkeepPerSecond; // Firewall: cost per connected node per second
 
     [Header("Combat")]
     public int maxHealth;

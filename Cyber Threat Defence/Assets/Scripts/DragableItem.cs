@@ -40,13 +40,14 @@ public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     {
         GameManager.Instance?.UnregisterNode(this);
         CredentialManager.Instance?.UnregisterNode(this);
+        ConnectionManager.Instance?.RemoveConnectionsFor(this);
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
         if (!hasBeenPlaced) return;
 
-        NodeInspectorPanel inspector = FindObjectOfType<NodeInspectorPanel>(true);
+        NodeInspectorPanel inspector = FindFirstObjectByType<NodeInspectorPanel>(FindObjectsInactive.Include);
         if (inspector != null)
         {
             PlacementSpot spot = GetComponentInParent<PlacementSpot>();
@@ -56,7 +57,7 @@ public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        NodeInspectorPanel inspector = FindObjectOfType<NodeInspectorPanel>(true);
+        NodeInspectorPanel inspector = FindFirstObjectByType<NodeInspectorPanel>(FindObjectsInactive.Include);
         if (inspector != null) inspector.Hide();
 
         // Spawn a fresh replacement in the taskbar slot
