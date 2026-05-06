@@ -97,7 +97,11 @@ public class NodeInspectorPanel : MonoBehaviour
 
         if (changePasswordButton != null)
         {
-            bool relevant = !currentNode.IsCompromised;
+            int sharedWith = CredentialManager.Instance != null
+                ? CredentialManager.Instance.GetGroupMembers(currentNode).Count
+                : 0;
+            bool relevant = !currentNode.IsCompromised && (sharedWith > 0 || currentNode.IsLeaking);
+
             changePasswordButton.gameObject.SetActive(relevant);
 
             if (relevant)
@@ -204,7 +208,7 @@ public class NodeInspectorPanel : MonoBehaviour
     private void OnChangePasswordClicked()
     {
         if (currentNode == null) return;
-        if (!currentNode.IsLeaking) return;
+        if (currentNode.IsCompromised) return;
         if (GameManager.Instance == null || !GameManager.Instance.CanAfford(ChangePasswordCost)) return;
 
         GameManager.Instance.DeductBalance(ChangePasswordCost);
