@@ -14,7 +14,7 @@ public class ThreatManager : MonoBehaviour
     public float maxAttackDuration = 30f;
 
     [Header("Damage")]
-    [Range(0f, 1f)] public float damagePercentPerBreach = 0.25f;
+    public int damagePerBreach = 40;
 
     [Header("Target Weights")]
     public int weightService  = 35;
@@ -148,11 +148,10 @@ public class ThreatManager : MonoBehaviour
             return;
         }
 
-        int damage = Mathf.CeilToInt(atk.target.nodeData.maxHealth * damagePercentPerBreach);
-        atk.target.ApplyDamage(damage);
+        atk.target.ApplyDamage(damagePerBreach);
 
         Debug.Log($"[ThreatManager] BREACH on {atk.target.nodeData.nodeName} — chance {chance:P0}, " +
-                  $"dealt {damage} dmg, HP now {atk.target.CurrentHealth}/{atk.target.nodeData.maxHealth}" +
+                  $"dealt {damagePerBreach} dmg, HP now {atk.target.CurrentHealth}/{atk.target.nodeData.maxHealth}" +
                   (atk.target.IsCompromised ? " [DESTROYED]" : ""));
     }
 

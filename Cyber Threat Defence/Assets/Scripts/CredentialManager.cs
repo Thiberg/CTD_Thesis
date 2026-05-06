@@ -31,6 +31,14 @@ public class CredentialManager : MonoBehaviour
         nodeCredentials[node] = lastUsedGroupId;
     }
 
+    // Mid-game password change. Caller (NodeInspectorPanel) handles charging the player.
+    // Does NOT update lastUsedGroupId — a defensive swap shouldn't bleed into the next placement.
+    public void SwapToNewCredential(DragableItem node)
+    {
+        if (node == null) return;
+        nodeCredentials[node] = nextGroupId++;
+    }
+
     // Called when a node is destroyed or sold
     public void UnregisterNode(DragableItem node)
     {

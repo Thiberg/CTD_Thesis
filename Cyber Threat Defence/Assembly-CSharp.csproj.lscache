@@ -53,6 +53,7 @@ TemporaryDependencyNodeTargetIdentifier=netstandard2.1
 Assets/Scripts/
  ConnectionDot.cs
  ConnectionManager.cs
+ CredentialLeakManager.cs
  CredentialManager.cs
  CredentialPopup.cs
  DeleteZone.cs

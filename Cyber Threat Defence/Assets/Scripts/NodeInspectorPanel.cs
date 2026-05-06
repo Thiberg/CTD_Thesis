@@ -27,6 +27,9 @@ public class NodeInspectorPanel : MonoBehaviour
     [Header("Buttons")]
     public Button upgradeButton;
     public Button sellButton;
+    public Button changePasswordButton;
+
+    private const int ChangePasswordCost = 50;
 
     private DragableItem currentNode;
     private PlacementSpot currentSpot;
@@ -38,6 +41,8 @@ public class NodeInspectorPanel : MonoBehaviour
         panelRoot.SetActive(false);
         sellButton.onClick.AddListener(OnSellClicked);
         upgradeButton.onClick.AddListener(OnUpgradeClicked);
+        if (changePasswordButton != null)
+            changePasswordButton.onClick.AddListener(OnChangePasswordClicked);
 
         // Upgrade economy not designed yet — disabled until Phase 9 follow-up.
         upgradeButton.interactable = false;
@@ -89,6 +94,18 @@ public class NodeInspectorPanel : MonoBehaviour
 
         if (securityText != null)
             securityText.text = "Security: " + currentNode.nodeData.securityLevel;
+
+        if (changePasswordButton != null)
+        {
+            bool relevant = !currentNode.IsCompromised;
+            changePasswordButton.gameObject.SetActive(relevant);
+
+            if (relevant)
+            {
+                bool canPay = GameManager.Instance != null && GameManager.Instance.CanAfford(ChangePasswordCost);
+                changePasswordButton.interactable = canPay;
+            }
+        }
 
         if (statusText == null) return;
 
@@ -182,5 +199,16 @@ public class NodeInspectorPanel : MonoBehaviour
     private void OnUpgradeClicked()
     {
         // Upgrade economy not designed yet — handler stays so we can wire it later.
+    }
+
+    private void OnChangePasswordClicked()
+    {
+        if (currentNode == null) return;
+        if (!currentNode.IsLeaking) return;
+        if (GameManager.Instance == null || !GameManager.Instance.CanAfford(ChangePasswordCost)) return;
+
+        GameManager.Instance.DeductBalance(ChangePasswordCost);
+        CredentialManager.Instance?.SwapToNewCredential(currentNode);
+        CredentialLeakManager.Instance?.StopLeak(currentNode);
     }
 }
