@@ -13,6 +13,7 @@ public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
     public int CurrentHealth { get; private set; }
     public bool IsCompromised { get; private set; }
+    public bool IsUnderAttack { get; private set; }
 
     public GameObject prefab;
     public bool isSource = true;
@@ -20,9 +21,32 @@ public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     [Header("Node Info")]
     public NodeData nodeData;
 
+    private Color originalColor = Color.white;
+
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
+        if (image != null) originalColor = image.color;
+    }
+
+    private void Update()
+    {
+        if (image == null || !hasBeenPlaced) return;
+
+        if (IsCompromised)
+        {
+            image.color = Color.red;
+            return;
+        }
+
+        if (IsUnderAttack)
+        {
+            float t = (Mathf.Sin(Time.time * 6f) + 1f) * 0.5f;
+            image.color = Color.Lerp(originalColor, Color.red, t);
+            return;
+        }
+
+        image.color = originalColor;
     }
 
     public void InitialiseHealth()
@@ -31,9 +55,20 @@ public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             CurrentHealth = nodeData.maxHealth;
     }
 
+    public void ApplyDamage(int amount)
+    {
+        CurrentHealth = Mathf.Max(0, CurrentHealth - amount);
+        if (CurrentHealth == 0) IsCompromised = true;
+    }
+
     public void SetCompromised(bool value)
     {
         IsCompromised = value;
+    }
+
+    public void SetUnderAttack(bool value)
+    {
+        IsUnderAttack = value;
     }
 
     private void OnDestroy()

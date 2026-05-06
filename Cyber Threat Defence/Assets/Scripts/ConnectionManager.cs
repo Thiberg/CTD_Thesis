@@ -48,9 +48,6 @@ public class ConnectionManager : MonoBehaviour
         // Force to top of Canvas so lines always render above the background.
         connectionsParent.transform.SetAsLastSibling();
 
-        Debug.Log($"[ConnectionManager] connectionsParent = '{connectionsParent.name}' " +
-                  $"(sibling {connectionsParent.GetSiblingIndex()})");
-
         CreateGhostLine();
     }
 
@@ -66,7 +63,30 @@ public class ConnectionManager : MonoBehaviour
                 conn.LineObject.GetComponent<RectTransform>(),
                 ScreenPos(conn.NodeA.GetComponent<RectTransform>()),
                 ScreenPos(conn.NodeB.GetComponent<RectTransform>()));
+
+            UpdateLineColor(conn);
         }
+    }
+
+    private void UpdateLineColor(NodeConnection conn)
+    {
+        Image img = conn.LineObject.GetComponent<Image>();
+        if (img == null) return;
+
+        Color baseColor = conn.Direction == ConnectionDirection.TwoWay ? twoWayColor : oneWayColor;
+
+        bool breached = conn.NodeA.IsCompromised || conn.NodeB.IsCompromised;
+        if (breached) { img.color = Color.red; return; }
+
+        bool attacked = conn.NodeA.IsUnderAttack || conn.NodeB.IsUnderAttack;
+        if (attacked)
+        {
+            float t = (Mathf.Sin(Time.time * 6f) + 1f) * 0.5f;
+            img.color = Color.Lerp(baseColor, Color.red, t);
+            return;
+        }
+
+        img.color = baseColor;
     }
 
     // ── Connection flow ──────────────────────────────────────────────────────
@@ -107,11 +127,7 @@ public class ConnectionManager : MonoBehaviour
             return;
         }
         if (nodeA == nodeB) return;
-        if (AlreadyConnected(nodeA, nodeB))
-        {
-            Debug.Log("[ConnectionManager] Already connected — skipped.");
-            return;
-        }
+        if (AlreadyConnected(nodeA, nodeB)) return;
 
         NodeConnection conn = new(nodeA, nodeB);
         connections.Add(conn);
@@ -130,9 +146,6 @@ public class ConnectionManager : MonoBehaviour
         Vector2 posA = ScreenPos(nodeA.GetComponent<RectTransform>());
         Vector2 posB = ScreenPos(nodeB.GetComponent<RectTransform>());
         SetLineBetween(rt, posA, posB);
-
-        Debug.Log($"[ConnectionManager] Line created: {nodeA.nodeData?.nodeName} → {nodeB.nodeData?.nodeName} | " +
-                  $"screenA={posA}, screenB={posB}, parent='{connectionsParent.name}'");
 
         DirectionPopup.Instance?.Show(conn);
     }
@@ -266,8 +279,6 @@ public class ConnectionManager : MonoBehaviour
         // Move behind nodes later by assigning connectionsParent in the Inspector instead.
         panel.transform.SetAsLastSibling();
 
-        Debug.Log($"[ConnectionManager] Created '_ConnectionsLayer' under '{target.name}' " +
-                  $"(sibling {panel.transform.GetSiblingIndex()})");
         return rt;
     }
 }

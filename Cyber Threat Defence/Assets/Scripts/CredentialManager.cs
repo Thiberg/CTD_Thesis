@@ -23,14 +23,12 @@ public class CredentialManager : MonoBehaviour
         int groupId = nextGroupId++;
         nodeCredentials[node] = groupId;
         lastUsedGroupId = groupId;
-        Debug.Log($"{node.nodeData.nodeName} → new credential group {groupId}");
     }
 
     public void AssignLastCredential(DragableItem node)
     {
         // Should only be called when HasLastCredential is true
         nodeCredentials[node] = lastUsedGroupId;
-        Debug.Log($"{node.nodeData.nodeName} → shared credential group {lastUsedGroupId}");
     }
 
     // Called when a node is destroyed or sold

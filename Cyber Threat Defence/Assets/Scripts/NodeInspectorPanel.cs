@@ -19,6 +19,11 @@ public class NodeInspectorPanel : MonoBehaviour
     public TextMeshProUGUI nodeLevel;
     public TextMeshProUGUI nodeDescription;
 
+    [Header("Live Stats")]
+    public TextMeshProUGUI hpText;
+    public TextMeshProUGUI securityText;
+    public TextMeshProUGUI statusText;
+
     [Header("Buttons")]
     public Button upgradeButton;
     public Button sellButton;
@@ -33,11 +38,17 @@ public class NodeInspectorPanel : MonoBehaviour
         panelRoot.SetActive(false);
         sellButton.onClick.AddListener(OnSellClicked);
         upgradeButton.onClick.AddListener(OnUpgradeClicked);
+
+        // Upgrade economy not designed yet — disabled until Phase 9 follow-up.
+        upgradeButton.interactable = false;
     }
 
     private void Update()
     {
         if (!panelRoot.activeSelf) return;
+
+        RefreshStats();
+
         if (!Mouse.current.leftButton.wasPressedThisFrame) return;
 
         if (!RectTransformUtility.RectangleContainsScreenPoint(panelRect, Mouse.current.position.ReadValue(), null))
@@ -65,7 +76,66 @@ public class NodeInspectorPanel : MonoBehaviour
             nodeDescription.text = "";
         }
 
+        RefreshStats();
         panelRoot.SetActive(true);
+    }
+
+    private void RefreshStats()
+    {
+        if (currentNode == null || currentNode.nodeData == null) return;
+
+        if (hpText != null)
+            hpText.text = $"HP: {currentNode.CurrentHealth}/{currentNode.nodeData.maxHealth}";
+
+        if (securityText != null)
+            securityText.text = "Security: " + currentNode.nodeData.securityLevel;
+
+        if (statusText == null) return;
+
+        if (currentNode.IsCompromised)
+        {
+            statusText.text = "<color=#FF5555>COMPROMISED</color>";
+            return;
+        }
+
+        switch (currentNode.nodeData.nodeType)
+        {
+            case NodeType.Service:
+                bool intact = ConnectionManager.Instance != null
+                              && ConnectionManager.Instance.IsChainIntact(currentNode);
+                statusText.text = intact
+                    ? $"Revenue: ${currentNode.nodeData.revenuePerSecond:0.##}/s"
+                    : $"Revenue: ${currentNode.nodeData.revenuePerSecond:0.##}/s (no chain)";
+                break;
+
+            case NodeType.Server:
+            {
+                int services = ConnectionManager.Instance != null
+                    ? ConnectionManager.Instance.GetConnectedNodes(currentNode, NodeType.Service).Count
+                    : 0;
+                statusText.text = "Connected services: " + services;
+                break;
+            }
+
+            case NodeType.Database:
+            {
+                int servers = ConnectionManager.Instance != null
+                    ? ConnectionManager.Instance.GetConnectedNodes(currentNode, NodeType.Server).Count
+                    : 0;
+                statusText.text = "Connected servers: " + servers;
+                break;
+            }
+
+            case NodeType.Firewall:
+            {
+                int connections = ConnectionManager.Instance != null
+                    ? ConnectionManager.Instance.GetConnectionCount(currentNode)
+                    : 0;
+                float upkeep = currentNode.nodeData.upkeepPerSecond * connections;
+                statusText.text = $"Upkeep: ${currentNode.nodeData.upkeepPerSecond:0.##}/s × {connections} = ${upkeep:0.##}/s";
+                break;
+            }
+        }
     }
 
     public void Hide()
@@ -111,6 +181,6 @@ public class NodeInspectorPanel : MonoBehaviour
 
     private void OnUpgradeClicked()
     {
-        Debug.Log("Upgrade clicked for: " + (currentNode != null ? currentNode.nodeData.nodeName : "none"));
+        // Upgrade economy not designed yet — handler stays so we can wire it later.
     }
 }

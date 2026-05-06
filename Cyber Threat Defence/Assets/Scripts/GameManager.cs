@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     [Header("Starting Values")]
-    public float startingBalance = 500f;
+    public float startingBalance = 1000f;
     public float startingReputation = 100f;
     public float sessionDuration = 900f; // 15 minutes
 
