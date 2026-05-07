@@ -191,8 +191,7 @@ public class NodeInspectorPanel : MonoBehaviour
 
         if (currentNode.nodeData != null)
         {
-            int refund = Mathf.RoundToInt(currentNode.nodeData.cost * 0.6f);
-            GameManager.Instance?.AddBalance(refund);
+            GameManager.Instance?.AddBalance(currentNode.GetSellRefund());
         }
 
         GameManager.Instance?.UnregisterNode(currentNode);

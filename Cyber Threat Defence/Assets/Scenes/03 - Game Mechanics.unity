@@ -7801,6 +7801,7 @@ MonoBehaviour:
   startingBalance: 1000
   startingReputation: 100
   sessionDuration: 900
+  reputationLossOnCompromise: 15
 --- !u!1001 &1579410411
 PrefabInstance:
   m_ObjectHideFlags: 0

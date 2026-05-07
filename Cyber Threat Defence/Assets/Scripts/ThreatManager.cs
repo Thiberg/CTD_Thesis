@@ -17,14 +17,16 @@ public class ThreatManager : MonoBehaviour
     public int damagePerBreach = 40;
 
     [Header("Target Weights")]
-    public int weightService  = 35;
-    public int weightDatabase = 35;
-    public int weightFirewall = 20;
-    public int weightServer   = 10;
+    public int weightService  = 40;
+    public int weightDatabase = 40;
+    public int weightFirewall = 0;   // Firewalls only attacked via redirection, never directly picked
+    public int weightServer   = 20;
 
     [Header("Breach Probability")]
     [Range(0f, 1f)] public float minBreachChance = 0.05f;
     [Range(0f, 1f)] public float firewallReduction = 0.25f;
+    // Each connection beyond the first erodes a firewall's protection by this much. Capped at zero net reduction.
+    [Range(0f, 1f)] public float firewallLoadPenalty = 0.05f;
 
     private float nextAttackTime;
     private readonly List<ActiveAttack> activeAttacks = new();
@@ -148,11 +150,33 @@ public class ThreatManager : MonoBehaviour
             return;
         }
 
-        atk.target.ApplyDamage(damagePerBreach);
+        DragableItem recipient = PickDamageRecipient(atk.target);
+        recipient.ApplyDamage(damagePerBreach);
 
-        Debug.Log($"[ThreatManager] BREACH on {atk.target.nodeData.nodeName} — chance {chance:P0}, " +
-                  $"dealt {damagePerBreach} dmg, HP now {atk.target.CurrentHealth}/{atk.target.nodeData.maxHealth}" +
-                  (atk.target.IsCompromised ? " [DESTROYED]" : ""));
+        string suffix = recipient.IsCompromised ? " [DESTROYED]" : "";
+        if (recipient != atk.target)
+            Debug.Log($"[ThreatManager] BREACH on {atk.target.nodeData.nodeName} (chance {chance:P0}) — " +
+                      $"absorbed by firewall {recipient.nodeData?.nodeName} " +
+                      $"(HP {recipient.CurrentHealth}/{recipient.nodeData?.maxHealth}){suffix}");
+        else
+            Debug.Log($"[ThreatManager] BREACH on {atk.target.nodeData.nodeName} (chance {chance:P0}) — " +
+                      $"dealt {damagePerBreach} dmg, HP now {recipient.CurrentHealth}/{recipient.nodeData.maxHealth}{suffix}");
+    }
+
+    private DragableItem PickDamageRecipient(DragableItem target)
+    {
+        if (ConnectionManager.Instance == null) return target;
+
+        List<DragableItem> firewalls = ConnectionManager.Instance.GetConnectedNodes(target, NodeType.Firewall);
+        List<DragableItem> healthy = new();
+        foreach (DragableItem fw in firewalls)
+        {
+            if (fw == null) continue;
+            if (fw.IsCompromised) continue;
+            healthy.Add(fw);
+        }
+        if (healthy.Count == 0) return target;
+        return healthy[Random.Range(0, healthy.Count)];
     }
 
     private float ComputeBreachChance(DragableItem target)
@@ -168,7 +192,11 @@ public class ThreatManager : MonoBehaviour
             {
                 if (fw == null) continue;
                 if (fw.IsCompromised) continue;
-                chance -= firewallReduction;
+
+                // Wider firewalls protect less per node. Floored at 0 — overloaded firewalls offer no protection but never harm.
+                int extraConnections = Mathf.Max(0, ConnectionManager.Instance.GetConnectionCount(fw) - 1);
+                float netReduction = Mathf.Max(0f, firewallReduction - firewallLoadPenalty * extraConnections);
+                chance -= netReduction;
             }
         }
 

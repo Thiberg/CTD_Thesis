@@ -85,6 +85,13 @@ public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         IsCompromised = value;
     }
 
+    public int GetSellRefund()
+    {
+        if (nodeData == null) return 0;
+        float multiplier = IsCompromised ? 0.1f : 0.6f;
+        return Mathf.RoundToInt(nodeData.cost * multiplier);
+    }
+
     public void SetUnderAttack(bool value)
     {
         IsUnderAttack = value;
