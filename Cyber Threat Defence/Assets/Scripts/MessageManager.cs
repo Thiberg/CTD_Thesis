@@ -13,6 +13,9 @@ public class MessageManager : MonoBehaviour
     public float minSpawnInterval = 45f;
     public float maxSpawnInterval = 90f;
 
+    [Header("Penalties")]
+    public float reputationLossOnIncorrect = 5f;
+
     private float nextSpawnTime;
 
     private readonly List<MessageData> inbox = new();
@@ -61,7 +64,6 @@ public class MessageManager : MonoBehaviour
         }
 
         inbox.Insert(0, msg); // Newest on top
-        Debug.Log($"[MessageManager] New message: \"{msg.subject}\" from {msg.sender} (type: {msg.type})");
         OnInboxChanged?.Invoke();
     }
 
@@ -92,8 +94,8 @@ public class MessageManager : MonoBehaviour
         bool correct = IsCorrectAction(msg.type, action);
         if (correct) CorrectCount++; else IncorrectCount++;
 
-        Debug.Log($"[MessageManager] {action} → \"{msg.subject}\" — {(correct ? "CORRECT" : "INCORRECT")} " +
-                  $"(running: {CorrectCount} correct / {IncorrectCount} incorrect)");
+        if (!correct && GameManager.Instance != null)
+            GameManager.Instance.ModifyReputation(-reputationLossOnIncorrect);
 
         OnInboxChanged?.Invoke();
         OnMessageResolved?.Invoke(msg, action, correct);

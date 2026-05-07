@@ -67,6 +67,7 @@ Assets/Scripts/
  NodeConnection.cs
  NodeData.cs
  NodeInspectorPanel.cs
+ NotificationBadge.cs
  PlacementSpot.cs
  RevenueManager.cs
  ThreatManager.cs

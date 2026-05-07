@@ -56,7 +56,6 @@ public class CredentialLeakManager : MonoBehaviour
         if (!leakingNodes.Add(node)) return;
 
         node.SetLeaking(true);
-        Debug.Log($"[CredentialLeak] {node.nodeData?.nodeName} started leaking (DOT)");
     }
 
     public void StopLeak(DragableItem node)

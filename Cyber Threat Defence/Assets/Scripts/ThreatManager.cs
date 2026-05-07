@@ -89,9 +89,6 @@ public class ThreatManager : MonoBehaviour
         target.SetUnderAttack(true);
         float duration = Random.Range(minAttackDuration, maxAttackDuration);
         activeAttacks.Add(new ActiveAttack { target = target, timeRemaining = duration });
-
-        Debug.Log($"[ThreatManager] Attack started on {target.nodeData?.nodeName} " +
-                  $"(security {target.nodeData?.securityLevel}) — hidden timer {duration:0.0}s");
     }
 
     private DragableItem PickTarget()
@@ -144,23 +141,10 @@ public class ThreatManager : MonoBehaviour
         float chance = ComputeBreachChance(atk.target);
         bool breached = Random.value < chance;
 
-        if (!breached)
-        {
-            Debug.Log($"[ThreatManager] Attack on {atk.target.nodeData.nodeName} FAILED — breach chance was {chance:P0}");
-            return;
-        }
+        if (!breached) return;
 
         DragableItem recipient = PickDamageRecipient(atk.target);
         recipient.ApplyDamage(damagePerBreach);
-
-        string suffix = recipient.IsCompromised ? " [DESTROYED]" : "";
-        if (recipient != atk.target)
-            Debug.Log($"[ThreatManager] BREACH on {atk.target.nodeData.nodeName} (chance {chance:P0}) — " +
-                      $"absorbed by firewall {recipient.nodeData?.nodeName} " +
-                      $"(HP {recipient.CurrentHealth}/{recipient.nodeData?.maxHealth}){suffix}");
-        else
-            Debug.Log($"[ThreatManager] BREACH on {atk.target.nodeData.nodeName} (chance {chance:P0}) — " +
-                      $"dealt {damagePerBreach} dmg, HP now {recipient.CurrentHealth}/{recipient.nodeData.maxHealth}{suffix}");
     }
 
     private DragableItem PickDamageRecipient(DragableItem target)

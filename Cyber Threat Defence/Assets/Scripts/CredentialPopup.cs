@@ -80,6 +80,5 @@ public class CredentialPopup : MonoBehaviour
         // First node ever with no balance for credentials — assign unique for free
         CredentialManager.Instance.AssignNewCredential(node);
         GameManager.Instance?.AddBalance(50f); // refund the $50 silently
-        Debug.Log("Fallback: assigned unique credential for free (no last password, can't afford new).");
     }
 }
