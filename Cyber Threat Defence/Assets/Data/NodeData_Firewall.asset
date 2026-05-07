@@ -18,7 +18,7 @@ MonoBehaviour:
   description: Reduces breach probability for all connected nodes. Carries a per-second
     maintenance cost that scales with nodes protected.
   icon: {fileID: -4727848491673685825, guid: 0847448bd18dda94fa1062152e40b896, type: 3}
-  cost: 175
+  cost: 300
   revenuePerSecond: 0
   upkeepPerSecond: 1
   maxHealth: 100

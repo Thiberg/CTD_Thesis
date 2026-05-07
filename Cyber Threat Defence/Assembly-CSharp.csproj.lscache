@@ -61,6 +61,9 @@ Assets/Scripts/
  DragableItem.cs
  GameManager.cs
  HUDController.cs
+ MessageData.cs
+ MessageInboxUI.cs
+ MessageManager.cs
  NodeConnection.cs
  NodeData.cs
  NodeInspectorPanel.cs
