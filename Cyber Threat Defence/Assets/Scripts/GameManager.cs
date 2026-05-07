@@ -11,6 +11,9 @@ public class GameManager : MonoBehaviour
     public float startingReputation = 100f;
     public float sessionDuration = 900f; // 15 minutes
 
+    [Header("Penalties")]
+    public float reputationLossOnCompromise = 15f;
+
     public float Balance { get; private set; }
     public float Reputation { get; private set; }
     public float TimeRemaining { get; private set; }

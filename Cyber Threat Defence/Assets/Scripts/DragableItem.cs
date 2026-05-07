@@ -71,9 +71,13 @@ public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         CurrentHealth = Mathf.Max(0, CurrentHealth - amount);
         if (CurrentHealth == 0) IsCompromised = true;
 
-        // Compromise just happened — propagate the leak to anyone sharing this node's password.
+        // Compromise just happened — drop reputation and propagate the leak to anyone sharing this node's password.
         if (!wasCompromised && IsCompromised)
+        {
+            if (GameManager.Instance != null)
+                GameManager.Instance.ModifyReputation(-GameManager.Instance.reputationLossOnCompromise);
             CredentialLeakManager.Instance?.StartLeakOnGroupOf(this);
+        }
     }
 
     public void SetCompromised(bool value)
