@@ -13,6 +13,13 @@ MonoBehaviour:
   m_Name: NodeData_Database
   m_EditorClassIdentifier: Assembly-CSharp::NodeData
   nodeName: Database
-  tier: x
-  description: Database is blah blah blah
+  nodeType: 2
+  tier: 1
+  description: Stores critical company data. If compromised, all connected Servers
+    and their Services stop earning.
   icon: {fileID: 7986758429472898131, guid: b07cf070ff11ba44bbb82fe1040560ee, type: 3}
+  cost: 200
+  revenuePerSecond: 0
+  upkeepPerSecond: 0
+  maxHealth: 160
+  securityLevel: 2

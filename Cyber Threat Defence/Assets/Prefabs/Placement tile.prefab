@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7722584350915776299}
   - component: {fileID: 6484311218484312684}
   - component: {fileID: 3241474018784849873}
+  - component: {fileID: 2273022931733885921}
   m_Layer: 5
   m_Name: Connection node (1)
   m_TagString: Untagged
@@ -75,6 +76,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2273022931733885921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 434875368634079907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ec3c4cfb371df409362b14630c36dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ConnectionDot
 --- !u!1 &1162937916036716717
 GameObject:
   m_ObjectHideFlags: 0
@@ -86,6 +99,7 @@ GameObject:
   - component: {fileID: 5312234278373641391}
   - component: {fileID: 5340324535100226496}
   - component: {fileID: 6666302682847191539}
+  - component: {fileID: 4058347625886156902}
   m_Layer: 5
   m_Name: Connection node (4)
   m_TagString: Untagged
@@ -150,6 +164,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4058347625886156902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1162937916036716717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ec3c4cfb371df409362b14630c36dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ConnectionDot
 --- !u!1 &1268848358117579697
 GameObject:
   m_ObjectHideFlags: 0
@@ -245,6 +271,7 @@ GameObject:
   - component: {fileID: 3159308446051706785}
   - component: {fileID: 8674186080140601862}
   - component: {fileID: 6713258251905473636}
+  - component: {fileID: 6952219570715975278}
   m_Layer: 5
   m_Name: Connection node (6)
   m_TagString: Untagged
@@ -309,6 +336,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6952219570715975278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2901969375025673812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ec3c4cfb371df409362b14630c36dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ConnectionDot
 --- !u!1 &3171529351565520630
 GameObject:
   m_ObjectHideFlags: 0
@@ -320,6 +359,7 @@ GameObject:
   - component: {fileID: 369661964756875280}
   - component: {fileID: 14809957896371578}
   - component: {fileID: 634996102629851750}
+  - component: {fileID: 2119599655882877203}
   m_Layer: 5
   m_Name: Connection node (5)
   m_TagString: Untagged
@@ -384,6 +424,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2119599655882877203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3171529351565520630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ec3c4cfb371df409362b14630c36dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ConnectionDot
 --- !u!1 &3595263674202248803
 GameObject:
   m_ObjectHideFlags: 0
@@ -395,6 +447,7 @@ GameObject:
   - component: {fileID: 5896198495609494824}
   - component: {fileID: 4721884009106003424}
   - component: {fileID: 6073207799417999276}
+  - component: {fileID: 4717731534017079692}
   m_Layer: 5
   m_Name: Connection node (3)
   m_TagString: Untagged
@@ -459,6 +512,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4717731534017079692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3595263674202248803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ec3c4cfb371df409362b14630c36dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ConnectionDot
 --- !u!1 &6864120744530533600
 GameObject:
   m_ObjectHideFlags: 0
@@ -470,6 +535,7 @@ GameObject:
   - component: {fileID: 6256164580670809882}
   - component: {fileID: 5928764988320523308}
   - component: {fileID: 714971837181008457}
+  - component: {fileID: 2523083619425430293}
   m_Layer: 5
   m_Name: Connection node (2)
   m_TagString: Untagged
@@ -534,6 +600,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2523083619425430293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6864120744530533600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ec3c4cfb371df409362b14630c36dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ConnectionDot
 --- !u!1 &6925140499361234428
 GameObject:
   m_ObjectHideFlags: 0
@@ -545,6 +623,7 @@ GameObject:
   - component: {fileID: 3829587699866627590}
   - component: {fileID: 3330009484760870620}
   - component: {fileID: 3102018599781433154}
+  - component: {fileID: 3684994112727922981}
   m_Layer: 5
   m_Name: Connection node (7)
   m_TagString: Untagged
@@ -609,6 +688,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3684994112727922981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6925140499361234428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ec3c4cfb371df409362b14630c36dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ConnectionDot
 --- !u!1 &7705184244849032168
 GameObject:
   m_ObjectHideFlags: 0
@@ -620,6 +711,7 @@ GameObject:
   - component: {fileID: 1710704853202382340}
   - component: {fileID: 747012352957085598}
   - component: {fileID: 1061399949006277756}
+  - component: {fileID: 3072120422340689608}
   m_Layer: 5
   m_Name: Connection node
   m_TagString: Untagged
@@ -684,6 +776,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3072120422340689608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7705184244849032168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ec3c4cfb371df409362b14630c36dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ConnectionDot
 --- !u!1001 &8033980485345933527
 PrefabInstance:
   m_ObjectHideFlags: 0

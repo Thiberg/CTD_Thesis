@@ -13,6 +13,13 @@ MonoBehaviour:
   m_Name: NodeData_Server
   m_EditorClassIdentifier: Assembly-CSharp::NodeData
   nodeName: Server
-  tier: x
-  description: Server is blah blah blah
+  nodeType: 1
+  tier: 1
+  description: Hosts Services and relays data to Databases. Required for any Service
+    to generate revenue.
   icon: {fileID: 2503668956862761215, guid: 0c8322c2ba441d14e8867f3484882807, type: 3}
+  cost: 150
+  revenuePerSecond: 0
+  upkeepPerSecond: 0
+  maxHealth: 120
+  securityLevel: 2

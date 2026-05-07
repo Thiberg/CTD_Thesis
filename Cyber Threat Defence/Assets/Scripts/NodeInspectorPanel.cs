@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 using TMPro;
 
 public class NodeInspectorPanel : MonoBehaviour
@@ -18,18 +19,45 @@ public class NodeInspectorPanel : MonoBehaviour
     public TextMeshProUGUI nodeLevel;
     public TextMeshProUGUI nodeDescription;
 
+    [Header("Live Stats")]
+    public TextMeshProUGUI hpText;
+    public TextMeshProUGUI securityText;
+    public TextMeshProUGUI statusText;
+
     [Header("Buttons")]
     public Button upgradeButton;
     public Button sellButton;
+    public Button changePasswordButton;
+
+    private const int ChangePasswordCost = 50;
 
     private DragableItem currentNode;
     private PlacementSpot currentSpot;
+    private RectTransform panelRect;
 
     private void Start()
     {
+        panelRect = panelRoot.GetComponent<RectTransform>();
         panelRoot.SetActive(false);
         sellButton.onClick.AddListener(OnSellClicked);
         upgradeButton.onClick.AddListener(OnUpgradeClicked);
+        if (changePasswordButton != null)
+            changePasswordButton.onClick.AddListener(OnChangePasswordClicked);
+
+        // Upgrade economy not designed yet — disabled until Phase 9 follow-up.
+        upgradeButton.interactable = false;
+    }
+
+    private void Update()
+    {
+        if (!panelRoot.activeSelf) return;
+
+        RefreshStats();
+
+        if (!Mouse.current.leftButton.wasPressedThisFrame) return;
+
+        if (!RectTransformUtility.RectangleContainsScreenPoint(panelRect, Mouse.current.position.ReadValue(), null))
+            Hide();
     }
 
     public void Show(DragableItem node, PlacementSpot spot)
@@ -44,7 +72,7 @@ public class NodeInspectorPanel : MonoBehaviour
             nodeName.text        = node.nodeData.nodeName;
             nodeLevel.text       = "Tier: " + node.nodeData.tier;
             nodeDescription.text = node.nodeData.description;
-            ShowIconForType(node.nodeData.nodeName);
+            ShowIconForType(node.nodeData.nodeType);
         }
         else
         {
@@ -53,7 +81,82 @@ public class NodeInspectorPanel : MonoBehaviour
             nodeDescription.text = "";
         }
 
+        RefreshStats();
         panelRoot.SetActive(true);
+    }
+
+    private void RefreshStats()
+    {
+        if (currentNode == null || currentNode.nodeData == null) return;
+
+        if (hpText != null)
+            hpText.text = $"HP: {currentNode.CurrentHealth}/{currentNode.nodeData.maxHealth}";
+
+        if (securityText != null)
+            securityText.text = "Security: " + currentNode.nodeData.securityLevel;
+
+        if (changePasswordButton != null)
+        {
+            int sharedWith = CredentialManager.Instance != null
+                ? CredentialManager.Instance.GetGroupMembers(currentNode).Count
+                : 0;
+            bool relevant = !currentNode.IsCompromised && (sharedWith > 0 || currentNode.IsLeaking);
+
+            changePasswordButton.gameObject.SetActive(relevant);
+
+            if (relevant)
+            {
+                bool canPay = GameManager.Instance != null && GameManager.Instance.CanAfford(ChangePasswordCost);
+                changePasswordButton.interactable = canPay;
+            }
+        }
+
+        if (statusText == null) return;
+
+        if (currentNode.IsCompromised)
+        {
+            statusText.text = "<color=#FF5555>COMPROMISED</color>";
+            return;
+        }
+
+        switch (currentNode.nodeData.nodeType)
+        {
+            case NodeType.Service:
+                bool intact = ConnectionManager.Instance != null
+                              && ConnectionManager.Instance.IsChainIntact(currentNode);
+                statusText.text = intact
+                    ? $"Revenue: ${currentNode.nodeData.revenuePerSecond:0.##}/s"
+                    : $"Revenue: ${currentNode.nodeData.revenuePerSecond:0.##}/s (no chain)";
+                break;
+
+            case NodeType.Server:
+            {
+                int services = ConnectionManager.Instance != null
+                    ? ConnectionManager.Instance.GetConnectedNodes(currentNode, NodeType.Service).Count
+                    : 0;
+                statusText.text = "Connected services: " + services;
+                break;
+            }
+
+            case NodeType.Database:
+            {
+                int servers = ConnectionManager.Instance != null
+                    ? ConnectionManager.Instance.GetConnectedNodes(currentNode, NodeType.Server).Count
+                    : 0;
+                statusText.text = "Connected servers: " + servers;
+                break;
+            }
+
+            case NodeType.Firewall:
+            {
+                int connections = ConnectionManager.Instance != null
+                    ? ConnectionManager.Instance.GetConnectionCount(currentNode)
+                    : 0;
+                float upkeep = currentNode.nodeData.upkeepPerSecond * connections;
+                statusText.text = $"Upkeep: ${currentNode.nodeData.upkeepPerSecond:0.##}/s × {connections} = ${upkeep:0.##}/s";
+                break;
+            }
+        }
     }
 
     public void Hide()
@@ -71,29 +174,44 @@ public class NodeInspectorPanel : MonoBehaviour
         if (iconFirewall) iconFirewall.SetActive(false);
     }
 
-    private void ShowIconForType(string name)
+    private void ShowIconForType(NodeType type)
     {
-        switch (name)
+        switch (type)
         {
-            case "Service":  if (iconService)  iconService.SetActive(true);  break;
-            case "Server":   if (iconServer)   iconServer.SetActive(true);   break;
-            case "Database": if (iconDatabase) iconDatabase.SetActive(true); break;
-            case "Firewall": if (iconFirewall) iconFirewall.SetActive(true); break;
-            default:
-                if (iconService) iconService.SetActive(true);
-                break;
+            case NodeType.Service:  if (iconService)  iconService.SetActive(true);  break;
+            case NodeType.Server:   if (iconServer)   iconServer.SetActive(true);   break;
+            case NodeType.Database: if (iconDatabase) iconDatabase.SetActive(true); break;
+            case NodeType.Firewall: if (iconFirewall) iconFirewall.SetActive(true); break;
         }
     }
 
     private void OnSellClicked()
     {
         if (currentNode == null) return;
+
+        if (currentNode.nodeData != null)
+        {
+            GameManager.Instance?.AddBalance(currentNode.GetSellRefund());
+        }
+
+        GameManager.Instance?.UnregisterNode(currentNode);
         Destroy(currentNode.gameObject);
         Hide();
     }
 
     private void OnUpgradeClicked()
     {
-        Debug.Log("Upgrade clicked for: " + (currentNode != null ? currentNode.nodeData.nodeName : "none"));
+        // Upgrade economy not designed yet — handler stays so we can wire it later.
+    }
+
+    private void OnChangePasswordClicked()
+    {
+        if (currentNode == null) return;
+        if (currentNode.IsCompromised) return;
+        if (GameManager.Instance == null || !GameManager.Instance.CanAfford(ChangePasswordCost)) return;
+
+        GameManager.Instance.DeductBalance(ChangePasswordCost);
+        CredentialManager.Instance?.SwapToNewCredential(currentNode);
+        CredentialLeakManager.Instance?.StopLeak(currentNode);
     }
 }

@@ -13,6 +13,13 @@ MonoBehaviour:
   m_Name: NodeData_Service
   m_EditorClassIdentifier: Assembly-CSharp::NodeData
   nodeName: Service
-  tier: x
-  description: Service is blah blah blah
+  nodeType: 0
+  tier: 1
+  description: Generates revenue when connected to an active Server. Primary target
+    for attackers.
   icon: {fileID: -7917427016257608160, guid: db9df3cf6ac79bc47a1999a989ce1b04, type: 3}
+  cost: 100
+  revenuePerSecond: 3
+  upkeepPerSecond: 0
+  maxHealth: 80
+  securityLevel: 1

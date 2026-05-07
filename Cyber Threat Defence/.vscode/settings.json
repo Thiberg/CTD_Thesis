@@ -67,5 +67,8 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "Cyber Threat Defence.slnx"
+    "dotnet.defaultSolution": "Cyber Threat Defence.slnx",
+    "cSpell.words": [
+        "Dragable"
+    ]
 }

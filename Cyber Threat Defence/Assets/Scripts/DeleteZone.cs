@@ -9,6 +9,10 @@ public class DeleteZone : MonoBehaviour, IDropHandler
 
         if (eventData.pointerDrag.TryGetComponent(out DragableItem dragableItem))
         {
+            if (dragableItem.hasBeenPlaced && dragableItem.nodeData != null)
+            {
+                GameManager.Instance?.AddBalance(dragableItem.GetSellRefund());
+            }
             Destroy(dragableItem.gameObject);
         }
     }

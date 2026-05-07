@@ -113,3 +113,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fb00163f7d75b739ae476b371437b14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  containerImage: {fileID: 7099030569025627529}
+  emptySprite: {fileID: -4191632211825339451, guid: d774507ece477b641b738fd24a84f4cc, type: 3}
+  occupiedSprite: {fileID: 7013082946078737751, guid: d774507ece477b641b738fd24a84f4cc, type: 3}
+  breachedSprite: {fileID: -5132353643788345415, guid: d774507ece477b641b738fd24a84f4cc, type: 3}

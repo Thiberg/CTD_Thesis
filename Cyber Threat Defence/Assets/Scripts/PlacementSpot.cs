@@ -1,31 +1,65 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class PlacementSpot : MonoBehaviour, IDropHandler, IPointerClickHandler
 {
+    [Header("Container Visuals")]
+    public Image containerImage;
+    public Sprite emptySprite;
+    public Sprite occupiedSprite;
+    public Sprite breachedSprite;
+
+    private void Update()
+    {
+        if (containerImage == null) return;
+
+        DragableItem child = GetComponentInChildren<DragableItem>();
+        Sprite target = emptySprite;
+        if (child != null && child.hasBeenPlaced)
+        {
+            bool showBreached = child.IsCompromised || child.IsUnderAttack;
+            target = showBreached ? breachedSprite : occupiedSprite;
+        }
+
+        if (target != null && containerImage.sprite != target)
+            containerImage.sprite = target;
+    }
+
     public void OnDrop(PointerEventData eventData)
     {
         if (eventData.pointerDrag == null) return;
-
         if (transform.childCount > 0) return;
+        if (!eventData.pointerDrag.TryGetComponent(out DragableItem dragableItem)) return;
 
-        if (eventData.pointerDrag.TryGetComponent(out DragableItem dragableItem))
+        bool isFreshPlacement = !dragableItem.hasBeenPlaced;
+
+        if (isFreshPlacement && dragableItem.nodeData != null)
         {
-            dragableItem.parentAfterDrag = transform;
-            dragableItem.wasDroppedOnValidSpot = true;
+            if (GameManager.Instance != null && !GameManager.Instance.CanAfford(dragableItem.nodeData.cost))
+                return;
+            GameManager.Instance?.DeductBalance(dragableItem.nodeData.cost);
+        }
+
+        dragableItem.parentAfterDrag = transform;
+        dragableItem.wasDroppedOnValidSpot = true;
+
+        if (isFreshPlacement)
+        {
             dragableItem.hasBeenPlaced = true;
+            dragableItem.InitialiseHealth();
+            GameManager.Instance?.RegisterNode(dragableItem);
+            CredentialPopup.Instance?.Show(dragableItem);
         }
     }
 
     public void OnPointerClick(PointerEventData eventData)
 {
-    Debug.Log("Spot clicked — children: " + transform.childCount);
-    
     DragableItem node = GetComponentInChildren<DragableItem>();
     if (node == null) return;
     if (!node.hasBeenPlaced) return;
 
-    NodeInspectorPanel inspector = FindObjectOfType<NodeInspectorPanel>();
+    NodeInspectorPanel inspector = FindFirstObjectByType<NodeInspectorPanel>(FindObjectsInactive.Include);
     if (inspector != null)
     {
         inspector.Show(node, this);
