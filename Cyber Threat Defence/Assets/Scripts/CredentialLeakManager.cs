@@ -9,6 +9,9 @@ public class CredentialLeakManager : MonoBehaviour
     public int damagePerSecond = 5;
     public float tickInterval = 1f;
 
+    public int TotalLeakDamageDealt { get; private set; }
+    public int NodesLostToLeaks { get; private set; }
+
     private float tickTimer;
     private readonly HashSet<DragableItem> leakingNodes = new();
 
@@ -34,8 +37,15 @@ public class CredentialLeakManager : MonoBehaviour
             if (node == null) { leakingNodes.Remove(node); continue; }
             if (node.IsCompromised) { StopLeak(node); continue; }
 
+            int hpBefore = node.CurrentHealth;
             node.ApplyDamage(damagePerSecond);
-            if (node.IsCompromised) StopLeak(node);
+            TotalLeakDamageDealt += hpBefore - node.CurrentHealth;
+
+            if (node.IsCompromised)
+            {
+                NodesLostToLeaks++;
+                StopLeak(node);
+            }
         }
     }
 

@@ -24,6 +24,8 @@ public class MessageManager : MonoBehaviour
 
     public int CorrectCount { get; private set; }
     public int IncorrectCount { get; private set; }
+    public int PhishingCorrectCount { get; private set; }
+    public int PhishingIncorrectCount { get; private set; }
 
     public static event Action OnInboxChanged;
     public static event Action<MessageData, MessageAction, bool> OnMessageResolved;
@@ -93,6 +95,11 @@ public class MessageManager : MonoBehaviour
 
         bool correct = IsCorrectAction(msg.type, action);
         if (correct) CorrectCount++; else IncorrectCount++;
+
+        if (msg.type == MessageType.Phishing)
+        {
+            if (correct) PhishingCorrectCount++; else PhishingIncorrectCount++;
+        }
 
         if (!correct && GameManager.Instance != null)
             GameManager.Instance.ModifyReputation(-reputationLossOnIncorrect);

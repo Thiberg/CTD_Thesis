@@ -1,10 +1,13 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
 {
     public Image image;
+    [Tooltip("TMP label showing $cost on dock items. Auto-hides after placement.")]
+    public TextMeshProUGUI priceLabel;
     private RectTransform rectTransform;
 
     [HideInInspector] public Transform parentAfterDrag;
@@ -12,9 +15,17 @@ public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     [HideInInspector] public bool hasBeenPlaced = false;
 
     public int CurrentHealth { get; private set; }
+    public int CurrentMaxHealth { get; private set; }
+    public int CurrentSecurityLevel { get; private set; }
+    public float CurrentRevenuePerSecond { get; private set; }
+    public float CurrentUpkeepPerSecond { get; private set; }
+    public float CurrentFirewallReductionBonus { get; private set; }
+    public int UpgradeLevel { get; private set; }
     public bool IsCompromised { get; private set; }
     public bool IsUnderAttack { get; private set; }
     public bool IsLeaking { get; private set; }
+
+    public bool CanUpgrade => nodeData != null && UpgradeLevel < nodeData.upgrades.Count;
 
     public GameObject prefab;
     public bool isSource = true;
@@ -28,12 +39,17 @@ public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     {
         rectTransform = GetComponent<RectTransform>();
         if (image != null) originalColor = image.color;
+        if (priceLabel != null && nodeData != null)
+            priceLabel.text = $"${nodeData.cost}";
     }
 
     private static readonly Color leakOrange = new Color(1f, 0.55f, 0f, 1f);
 
     private void Update()
     {
+        if (priceLabel != null && priceLabel.gameObject.activeSelf == hasBeenPlaced)
+            priceLabel.gameObject.SetActive(!hasBeenPlaced);
+
         if (image == null || !hasBeenPlaced) return;
 
         if (IsCompromised)
@@ -61,8 +77,32 @@ public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
     public void InitialiseHealth()
     {
-        if (nodeData != null)
-            CurrentHealth = nodeData.maxHealth;
+        if (nodeData == null) return;
+        UpgradeLevel = 0;
+        CurrentMaxHealth = nodeData.maxHealth;
+        CurrentSecurityLevel = nodeData.securityLevel;
+        CurrentRevenuePerSecond = nodeData.revenuePerSecond;
+        CurrentUpkeepPerSecond = nodeData.upkeepPerSecond;
+        CurrentFirewallReductionBonus = 0f;
+        CurrentHealth = CurrentMaxHealth;
+    }
+
+    public int GetUpgradeCost() => CanUpgrade ? nodeData.upgrades[UpgradeLevel].costToUpgrade : -1;
+
+    public void Upgrade()
+    {
+        if (!CanUpgrade) return;
+        UpgradeStep step = nodeData.upgrades[UpgradeLevel];
+
+        CurrentMaxHealth = step.newMaxHealth;
+        CurrentHealth = CurrentMaxHealth;
+        CurrentSecurityLevel = Mathf.Min(5, CurrentSecurityLevel + step.securityBoost);
+
+        if (step.newRevenuePerSecond > 0f) CurrentRevenuePerSecond = step.newRevenuePerSecond;
+        if (step.newUpkeepPerSecond  > 0f) CurrentUpkeepPerSecond  = step.newUpkeepPerSecond;
+        CurrentFirewallReductionBonus += step.firewallReductionBonus;
+
+        UpgradeLevel++;
     }
 
     public void ApplyDamage(int amount)
@@ -88,8 +128,12 @@ public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     public int GetSellRefund()
     {
         if (nodeData == null) return 0;
+        int totalInvested = nodeData.cost;
+        for (int i = 0; i < UpgradeLevel && i < nodeData.upgrades.Count; i++)
+            totalInvested += nodeData.upgrades[i].costToUpgrade;
+
         float multiplier = IsCompromised ? 0.1f : 0.6f;
-        return Mathf.RoundToInt(nodeData.cost * multiplier);
+        return Mathf.RoundToInt(totalInvested * multiplier);
     }
 
     public void SetUnderAttack(bool value)

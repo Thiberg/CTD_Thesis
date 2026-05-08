@@ -64,6 +64,7 @@ Assets/Scripts/
  MessageData.cs
  MessageInboxUI.cs
  MessageManager.cs
+ MetricsTracker.cs
  NodeConnection.cs
  NodeData.cs
  NodeInspectorPanel.cs

@@ -35,17 +35,21 @@ public class NodeInspectorPanel : MonoBehaviour
     private PlacementSpot currentSpot;
     private RectTransform panelRect;
 
+    private TextMeshProUGUI sellLabel;
+    private TextMeshProUGUI upgradeLabel;
+
     private void Start()
     {
         panelRect = panelRoot.GetComponent<RectTransform>();
+
+        if (sellButton != null)    sellLabel    = sellButton.GetComponentInChildren<TextMeshProUGUI>(true);
+        if (upgradeButton != null) upgradeLabel = upgradeButton.GetComponentInChildren<TextMeshProUGUI>(true);
+
         panelRoot.SetActive(false);
         sellButton.onClick.AddListener(OnSellClicked);
         upgradeButton.onClick.AddListener(OnUpgradeClicked);
         if (changePasswordButton != null)
             changePasswordButton.onClick.AddListener(OnChangePasswordClicked);
-
-        // Upgrade economy not designed yet — disabled until Phase 9 follow-up.
-        upgradeButton.interactable = false;
     }
 
     private void Update()
@@ -70,7 +74,6 @@ public class NodeInspectorPanel : MonoBehaviour
         if (node.nodeData != null)
         {
             nodeName.text        = node.nodeData.nodeName;
-            nodeLevel.text       = "Tier: " + node.nodeData.tier;
             nodeDescription.text = node.nodeData.description;
             ShowIconForType(node.nodeData.nodeType);
         }
@@ -89,11 +92,37 @@ public class NodeInspectorPanel : MonoBehaviour
     {
         if (currentNode == null || currentNode.nodeData == null) return;
 
+        if (nodeLevel != null)
+            nodeLevel.text = "Tier: " + (currentNode.nodeData.tier + currentNode.UpgradeLevel);
+
         if (hpText != null)
-            hpText.text = $"HP: {currentNode.CurrentHealth}/{currentNode.nodeData.maxHealth}";
+            hpText.text = $"HP: {currentNode.CurrentHealth}/{currentNode.CurrentMaxHealth}";
 
         if (securityText != null)
-            securityText.text = "Security: " + currentNode.nodeData.securityLevel;
+            securityText.text = "Security: " + currentNode.CurrentSecurityLevel;
+
+        if (sellLabel != null)
+            sellLabel.text = $"Sell  ${currentNode.GetSellRefund()}";
+
+        if (upgradeLabel != null && upgradeButton != null)
+        {
+            if (currentNode.IsCompromised)
+            {
+                upgradeLabel.text = "Compromised";
+                upgradeButton.interactable = false;
+            }
+            else if (!currentNode.CanUpgrade)
+            {
+                upgradeLabel.text = "Maxed";
+                upgradeButton.interactable = false;
+            }
+            else
+            {
+                int cost = currentNode.GetUpgradeCost();
+                upgradeLabel.text = $"Upgrade  ${cost}";
+                upgradeButton.interactable = GameManager.Instance != null && GameManager.Instance.CanAfford(cost);
+            }
+        }
 
         if (changePasswordButton != null)
         {
@@ -125,8 +154,8 @@ public class NodeInspectorPanel : MonoBehaviour
                 bool intact = ConnectionManager.Instance != null
                               && ConnectionManager.Instance.IsChainIntact(currentNode);
                 statusText.text = intact
-                    ? $"Revenue: ${currentNode.nodeData.revenuePerSecond:0.##}/s"
-                    : $"Revenue: ${currentNode.nodeData.revenuePerSecond:0.##}/s (no chain)";
+                    ? $"Revenue: ${currentNode.CurrentRevenuePerSecond:0.##}/s"
+                    : $"Revenue: ${currentNode.CurrentRevenuePerSecond:0.##}/s (no chain)";
                 break;
 
             case NodeType.Server:
@@ -134,7 +163,10 @@ public class NodeInspectorPanel : MonoBehaviour
                 int services = ConnectionManager.Instance != null
                     ? ConnectionManager.Instance.GetConnectedNodes(currentNode, NodeType.Service).Count
                     : 0;
-                statusText.text = "Connected services: " + services;
+                string upkeepInfo = currentNode.CurrentUpkeepPerSecond > 0f
+                    ? $"  |  Upkeep: ${currentNode.CurrentUpkeepPerSecond:0.##}/s"
+                    : "";
+                statusText.text = "Connected services: " + services + upkeepInfo;
                 break;
             }
 
@@ -143,7 +175,10 @@ public class NodeInspectorPanel : MonoBehaviour
                 int servers = ConnectionManager.Instance != null
                     ? ConnectionManager.Instance.GetConnectedNodes(currentNode, NodeType.Server).Count
                     : 0;
-                statusText.text = "Connected servers: " + servers;
+                string upkeepInfo = currentNode.CurrentUpkeepPerSecond > 0f
+                    ? $"  |  Upkeep: ${currentNode.CurrentUpkeepPerSecond:0.##}/s"
+                    : "";
+                statusText.text = "Connected servers: " + servers + upkeepInfo;
                 break;
             }
 
@@ -152,8 +187,8 @@ public class NodeInspectorPanel : MonoBehaviour
                 int connections = ConnectionManager.Instance != null
                     ? ConnectionManager.Instance.GetConnectionCount(currentNode)
                     : 0;
-                float upkeep = currentNode.nodeData.upkeepPerSecond * connections;
-                statusText.text = $"Upkeep: ${currentNode.nodeData.upkeepPerSecond:0.##}/s × {connections} = ${upkeep:0.##}/s";
+                float upkeep = currentNode.CurrentUpkeepPerSecond * connections;
+                statusText.text = $"Upkeep: ${currentNode.CurrentUpkeepPerSecond:0.##}/s × {connections} = ${upkeep:0.##}/s";
                 break;
             }
         }
@@ -201,7 +236,15 @@ public class NodeInspectorPanel : MonoBehaviour
 
     private void OnUpgradeClicked()
     {
-        // Upgrade economy not designed yet — handler stays so we can wire it later.
+        if (currentNode == null) return;
+        if (currentNode.IsCompromised) return;
+        if (!currentNode.CanUpgrade) return;
+
+        int cost = currentNode.GetUpgradeCost();
+        if (GameManager.Instance == null || !GameManager.Instance.CanAfford(cost)) return;
+
+        GameManager.Instance.DeductBalance(cost);
+        currentNode.Upgrade();
     }
 
     private void OnChangePasswordClicked()

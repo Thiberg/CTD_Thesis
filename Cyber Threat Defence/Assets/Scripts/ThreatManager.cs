@@ -234,7 +234,7 @@ public class ThreatManager : MonoBehaviour
     {
         if (target.nodeData == null) return 0f;
 
-        float chance = (6 - target.nodeData.securityLevel) * 0.15f;
+        float chance = (6 - target.CurrentSecurityLevel) * 0.15f;
 
         if (ConnectionManager.Instance != null)
         {
@@ -246,7 +246,8 @@ public class ThreatManager : MonoBehaviour
 
                 // Wider firewalls protect less per node. Floored at 0 — overloaded firewalls offer no protection but never harm.
                 int extraConnections = Mathf.Max(0, ConnectionManager.Instance.GetConnectionCount(fw) - 1);
-                float netReduction = Mathf.Max(0f, firewallReduction - firewallLoadPenalty * extraConnections);
+                float reduction = firewallReduction + fw.CurrentFirewallReductionBonus;
+                float netReduction = Mathf.Max(0f, reduction - firewallLoadPenalty * extraConnections);
                 chance -= netReduction;
             }
         }
