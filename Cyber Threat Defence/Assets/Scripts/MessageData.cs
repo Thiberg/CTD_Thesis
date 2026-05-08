@@ -11,6 +11,6 @@ public class MessageData : ScriptableObject
     [TextArea(3, 8)] public string body;
     public MessageType type;
 
-    [Tooltip("0 = eligible in any stage. 1/2/3 = locked to that stage only.")]
+    [Tooltip("0 = eligible in any stage. 1/2/3 = eligible from that stage onwards (Stage 1 mails persist into 2 and 3).")]
     public int stage = 0;
 }

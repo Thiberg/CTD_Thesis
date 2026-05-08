@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c42d99f51b04e3a41a63aa2deed8438f, type: 3}
-  m_Name: AccessRequest
+  m_Name: Stage1 3
   m_EditorClassIdentifier: Assembly-CSharp::MessageData
-  sender: Sarah Lin
-  subject: Need server access
-  body: "Hi,\n\nCould you grant me access to the new server? I need it to finish
-    the Q3 report. \n\nThanks."
-  type: 0
-  stage: 0
+  sender: System Admin
+  subject: Mandatory patch install required today
+  body: "Hi, \n\nAll staff must install the critical security patch before end of
+    day. Accounts without the patch will lose network access from tomorrow. Download
+    here: http://novacorp-patch.net/install"
+  type: 1
+  stage: 1

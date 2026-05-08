@@ -10,9 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c42d99f51b04e3a41a63aa2deed8438f, type: 3}
-  m_Name: PasswordReset
+  m_Name: Stage2 2
   m_EditorClassIdentifier: Assembly-CSharp::MessageData
-  sender: IT-Support@n0vacorp.com
-  subject: 'URGENT: Password expired'
-  body: 'Your password expires in 1 hour. Click here: http://novacorp-secure.tk/reset'
+  sender: M. Carr
+  subject: System access renewal
+  body: "Hi, \n\nYour system access is due for renewal this month. To avoid interruption
+    please complete the renewal form at the link below: http://novacorp-access.net/renew.
+    \n\nThank you."
   type: 1
+  stage: 2

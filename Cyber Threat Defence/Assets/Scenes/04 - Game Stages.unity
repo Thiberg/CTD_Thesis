@@ -878,8 +878,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MessageManager
   messagePool:
   - {fileID: 11400000, guid: b595e26c1377dd0448e01d95882db14c, type: 2}
+  - {fileID: 11400000, guid: 99e69f3fd8c48694bb35ca5e7f9942c2, type: 2}
+  - {fileID: 11400000, guid: f76a1c66a518daf4a808e93393b7c540, type: 2}
+  - {fileID: 11400000, guid: 3e45621d3c8624046a22f8b65d03c9a1, type: 2}
+  - {fileID: 11400000, guid: 83b99912c2c7a6c44bb0423042c61124, type: 2}
+  - {fileID: 11400000, guid: 0600c19023559dc45abc6e5a4a2dde05, type: 2}
+  - {fileID: 11400000, guid: 2c169dfb77cc0e943822d3fc497f1713, type: 2}
+  - {fileID: 11400000, guid: c63bfc11d767b0747b1d1447170a2726, type: 2}
+  - {fileID: 11400000, guid: 444996def6600664283644fc5cff1e8a, type: 2}
+  - {fileID: 11400000, guid: df0d7a63f59a2bb41b1502789f0949ea, type: 2}
   - {fileID: 11400000, guid: f5dca5fe0a871344584a7798e1eab0bc, type: 2}
+  - {fileID: 11400000, guid: 655df312add58d54d9601245f8f76107, type: 2}
+  - {fileID: 11400000, guid: e83ccdaac92525c4fa47dc1b647c5eed, type: 2}
   - {fileID: 11400000, guid: 52036787933863c45a82cdb5ccccdbfe, type: 2}
+  - {fileID: 11400000, guid: 3b6f99719ef9fab489b6b3eb39d659c2, type: 2}
+  - {fileID: 11400000, guid: 6ddadeee86a756241b25562473d338ef, type: 2}
+  - {fileID: 11400000, guid: b3f8ecbd8cde4d74a8b78bde149a7384, type: 2}
+  - {fileID: 11400000, guid: 6ea1158c43e781643909e2c646da0449, type: 2}
+  - {fileID: 11400000, guid: b0d38f33f4c413048996e07816b7d0a5, type: 2}
+  - {fileID: 11400000, guid: b07ad7b8fa0dcf94f8e6463fe7985fa4, type: 2}
+  - {fileID: 11400000, guid: 1d0a3164e5d884040836d4a676869946, type: 2}
+  - {fileID: 11400000, guid: 6d5c07716f8d641428801ac5bd39ce93, type: 2}
+  - {fileID: 11400000, guid: dcfd6bdfd29529c48a218687cadc7cc0, type: 2}
+  - {fileID: 11400000, guid: 12a172e281a00094cbc651a97f9b3803, type: 2}
+  - {fileID: 11400000, guid: f0f3ec64204d96146ae82da0f55d5f46, type: 2}
+  - {fileID: 11400000, guid: 8cf605bdc07f69a42b2d62e549e753b4, type: 2}
   minSpawnInterval: 5
   maxSpawnInterval: 10
   reputationLossOnIncorrect: 5

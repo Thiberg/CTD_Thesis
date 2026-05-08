@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c42d99f51b04e3a41a63aa2deed8438f, type: 3}
-  m_Name: AccessRequest
+  m_Name: Stage3 3
   m_EditorClassIdentifier: Assembly-CSharp::MessageData
-  sender: Sarah Lin
-  subject: Need server access
-  body: "Hi,\n\nCould you grant me access to the new server? I need it to finish
-    the Q3 report. \n\nThanks."
-  type: 0
-  stage: 0
+  sender: KarenSolberg
+  subject: Analytics dashboard issue
+  body: "Hi, \n\nThe dashboard issue has been resolved on our end. To complete the
+    fix I just need you to confirm your current admin credentials so I can update
+    the access logs correctly. Should be the last step. \n\nThanks."
+  type: 1
+  stage: 3

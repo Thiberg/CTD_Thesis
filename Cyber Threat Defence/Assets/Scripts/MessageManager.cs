@@ -93,7 +93,7 @@ public class MessageManager : MonoBehaviour
         if (msg == null) return false;
         if (msg.stage == 0) return true;
         int current = StageManager.Instance != null ? StageManager.Instance.CurrentStage : 1;
-        return msg.stage == current;
+        return msg.stage <= current;
     }
 
     public void RespondTo(MessageData msg, MessageAction action)

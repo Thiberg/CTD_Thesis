@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c42d99f51b04e3a41a63aa2deed8438f, type: 3}
-  m_Name: AccessRequest
+  m_Name: AccessRequest 8
   m_EditorClassIdentifier: Assembly-CSharp::MessageData
-  sender: Sarah Lin
-  subject: Need server access
-  body: "Hi,\n\nCould you grant me access to the new server? I need it to finish
-    the Q3 report. \n\nThanks."
+  sender: Tom Eriksen
+  subject: Cannot access shared folder
+  body: "Hi, \n\nI was told I would have access to the team folder by now but I am
+    still getting a permission denied error. Could you look into it?"
   type: 0
   stage: 0
