@@ -1388,6 +1388,10 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6400814857594035792, guid: 82e5b0a61f279dd2f88f13ea3cd2d6c1, type: 3}
+      propertyPath: m_text
+      value: $100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 6384015769906393974, guid: 82e5b0a61f279dd2f88f13ea3cd2d6c1, type: 3}
@@ -1719,7 +1723,7 @@ MonoBehaviour:
     maxAttackInterval: 13
     minAttackDuration: 10
     maxAttackDuration: 18
-    minBreachChance: 0.18
+    minBreachChance: 0.32
     weightService: 20
     weightDatabase: 60
     weightServer: 20
@@ -3490,6 +3494,10 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6400814857594035792, guid: 82e5b0a61f279dd2f88f13ea3cd2d6c1, type: 3}
+      propertyPath: m_text
+      value: $300
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 3982609861706959924, guid: 82e5b0a61f279dd2f88f13ea3cd2d6c1, type: 3}
@@ -4100,7 +4108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bdc7893b1eee9b4db64070c8364d22a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  startingBalance: 1000
+  startingBalance: 500
   startingReputation: 100
   sessionDuration: 900
   reputationLossOnCompromise: 15
@@ -8166,6 +8174,10 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6400814857594035792, guid: 82e5b0a61f279dd2f88f13ea3cd2d6c1, type: 3}
+      propertyPath: m_text
+      value: $150
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 6384015769906393974, guid: 82e5b0a61f279dd2f88f13ea3cd2d6c1, type: 3}
@@ -10242,6 +10254,10 @@ PrefabInstance:
     - target: {fileID: 4423067634205881236, guid: 82e5b0a61f279dd2f88f13ea3cd2d6c1, type: 3}
       propertyPath: m_Color.r
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6400814857594035792, guid: 82e5b0a61f279dd2f88f13ea3cd2d6c1, type: 3}
+      propertyPath: m_text
+      value: $200
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:

@@ -23,3 +23,16 @@ MonoBehaviour:
   upkeepPerSecond: 0
   maxHealth: 120
   securityLevel: 2
+  upgrades:
+  - costToUpgrade: 300
+    newMaxHealth: 160
+    securityBoost: 1
+    newRevenuePerSecond: 0
+    newUpkeepPerSecond: 1
+    firewallReductionBonus: 0
+  - costToUpgrade: 750
+    newMaxHealth: 210
+    securityBoost: 1
+    newRevenuePerSecond: 0
+    newUpkeepPerSecond: 3
+    firewallReductionBonus: 0

@@ -10,4 +10,7 @@ public class MessageData : ScriptableObject
     public string subject;
     [TextArea(3, 8)] public string body;
     public MessageType type;
+
+    [Tooltip("0 = eligible in any stage. 1/2/3 = locked to that stage only.")]
+    public int stage = 0;
 }

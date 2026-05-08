@@ -73,7 +73,7 @@ public class MessageManager : MonoBehaviour
     {
         int validCount = 0;
         for (int i = 0; i < messagePool.Count; i++)
-            if (messagePool[i] != null) validCount++;
+            if (IsEligible(messagePool[i])) validCount++;
 
         if (validCount == 0) return null;
 
@@ -81,11 +81,19 @@ public class MessageManager : MonoBehaviour
         int seen = 0;
         for (int i = 0; i < messagePool.Count; i++)
         {
-            if (messagePool[i] == null) continue;
+            if (!IsEligible(messagePool[i])) continue;
             if (seen == target) return messagePool[i];
             seen++;
         }
         return null;
+    }
+
+    private static bool IsEligible(MessageData msg)
+    {
+        if (msg == null) return false;
+        if (msg.stage == 0) return true;
+        int current = StageManager.Instance != null ? StageManager.Instance.CurrentStage : 1;
+        return msg.stage == current;
     }
 
     public void RespondTo(MessageData msg, MessageAction action)
