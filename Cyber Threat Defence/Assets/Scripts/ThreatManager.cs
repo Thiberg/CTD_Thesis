@@ -3,30 +3,61 @@ using UnityEngine;
 
 public class ThreatManager : MonoBehaviour
 {
+    [System.Serializable]
+    public class StageConfig
+    {
+        public float minAttackInterval = 15f;
+        public float maxAttackInterval = 25f;
+        public float minAttackDuration = 20f;
+        public float maxAttackDuration = 30f;
+        [Range(0f, 1f)] public float minBreachChance = 0.05f;
+        public int weightService  = 40;
+        public int weightDatabase = 40;
+        public int weightServer   = 20;
+        public int weightFirewall = 0;
+
+        public static StageConfig Stage2Default() => new()
+        {
+            minAttackInterval = 10f, maxAttackInterval = 18f,
+            minAttackDuration = 15f, maxAttackDuration = 25f,
+            minBreachChance = 0.10f,
+            weightService = 30, weightDatabase = 50, weightServer = 20, weightFirewall = 0,
+        };
+
+        public static StageConfig Stage3Default() => new()
+        {
+            minAttackInterval = 7f, maxAttackInterval = 13f,
+            minAttackDuration = 10f, maxAttackDuration = 18f,
+            minBreachChance = 0.18f,
+            weightService = 20, weightDatabase = 60, weightServer = 20, weightFirewall = 0,
+        };
+    }
+
     public static ThreatManager Instance { get; private set; }
 
-    [Header("Attack Scheduling")]
-    public float minAttackInterval = 15f;
-    public float maxAttackInterval = 25f;
-
-    [Header("Attack Timer (Stage 1 defaults)")]
-    public float minAttackDuration = 20f;
-    public float maxAttackDuration = 30f;
+    // Stage-controlled runtime values — tune via Stage Configs below, not these.
+    [HideInInspector] public float minAttackInterval = 15f;
+    [HideInInspector] public float maxAttackInterval = 25f;
+    [HideInInspector] public float minAttackDuration = 20f;
+    [HideInInspector] public float maxAttackDuration = 30f;
+    [HideInInspector] public int weightService  = 40;
+    [HideInInspector] public int weightDatabase = 40;
+    [HideInInspector] public int weightFirewall = 0;
+    [HideInInspector] public int weightServer   = 20;
+    [HideInInspector, Range(0f, 1f)] public float minBreachChance = 0.05f;
 
     [Header("Damage")]
     public int damagePerBreach = 40;
 
-    [Header("Target Weights")]
-    public int weightService  = 40;
-    public int weightDatabase = 40;
-    public int weightFirewall = 0;   // Firewalls only attacked via redirection, never directly picked
-    public int weightServer   = 20;
-
-    [Header("Breach Probability")]
-    [Range(0f, 1f)] public float minBreachChance = 0.05f;
+    [Header("Firewall")]
     [Range(0f, 1f)] public float firewallReduction = 0.25f;
     // Each connection beyond the first erodes a firewall's protection by this much. Capped at zero net reduction.
     [Range(0f, 1f)] public float firewallLoadPenalty = 0.05f;
+
+    [Header("Stage Configs")]
+    public StageConfig stage1 = new();
+    public StageConfig stage2 = StageConfig.Stage2Default();
+    public StageConfig stage3 = StageConfig.Stage3Default();
 
     private float nextAttackTime;
     private readonly List<ActiveAttack> activeAttacks = new();
@@ -41,11 +72,47 @@ public class ThreatManager : MonoBehaviour
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
+
+        stage1 ??= new StageConfig();
+        stage2 ??= StageConfig.Stage2Default();
+        stage3 ??= StageConfig.Stage3Default();
+    }
+
+    private void OnEnable()
+    {
+        StageManager.OnStageChanged += ApplyStage;
+        ApplyStage(StageManager.Instance != null ? StageManager.Instance.CurrentStage : 1);
+    }
+
+    private void OnDisable()
+    {
+        StageManager.OnStageChanged -= ApplyStage;
     }
 
     private void Start()
     {
         ScheduleNextAttack();
+    }
+
+    private void ApplyStage(int stage)
+    {
+        StageConfig cfg = stage switch
+        {
+            2 => stage2,
+            3 => stage3,
+            _ => stage1,
+        };
+        if (cfg == null) return;
+
+        minAttackInterval = cfg.minAttackInterval;
+        maxAttackInterval = cfg.maxAttackInterval;
+        minAttackDuration = cfg.minAttackDuration;
+        maxAttackDuration = cfg.maxAttackDuration;
+        minBreachChance   = cfg.minBreachChance;
+        weightService  = cfg.weightService;
+        weightDatabase = cfg.weightDatabase;
+        weightServer   = cfg.weightServer;
+        weightFirewall = cfg.weightFirewall;
     }
 
     private void Update()

@@ -70,6 +70,7 @@ Assets/Scripts/
  NotificationBadge.cs
  PlacementSpot.cs
  RevenueManager.cs
+ StageManager.cs
  ThreatManager.cs
  UIAppController.cs
 Assets/TextMesh Pro/Examples & Extras/Scripts/
