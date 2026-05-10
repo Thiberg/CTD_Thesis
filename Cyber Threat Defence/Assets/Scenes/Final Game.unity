@@ -3007,7 +3007,7 @@ MonoBehaviour:
     maxAttackInterval: 18
     minAttackDuration: 7
     maxAttackDuration: 15
-    minBreachChance: 0.1
+    minBreachChance: 0.125
     weightService: 30
     weightDatabase: 50
     weightServer: 20
