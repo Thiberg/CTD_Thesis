@@ -14,6 +14,13 @@ public class GameManager : MonoBehaviour
     [Header("Penalties")]
     public float reputationLossOnCompromise = 15f;
 
+    [Header("Lose Conditions")]
+    [Tooltip("Game over if no service earns revenue for this many seconds (only counts once the player has earned at least once).")]
+    public float noRevenueLoseThreshold = 60f;
+
+    private float noRevenueTimer;
+    private bool hasEverEarned;
+
     public float Balance { get; private set; }
     public float Reputation { get; private set; }
     public float TimeRemaining { get; private set; }
@@ -101,9 +108,17 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        if (Balance <= 0f && !HasAnyEarningService())
+        bool earning = HasAnyEarningService();
+        if (earning)
         {
-            TriggerGameOver("Economic collapse — no active income and no funds to recover.");
+            hasEverEarned = true;
+            noRevenueTimer = 0f;
+        }
+        else if (hasEverEarned)
+        {
+            noRevenueTimer += Time.deltaTime;
+            if (noRevenueTimer >= noRevenueLoseThreshold)
+                TriggerGameOver("Operations stalled — no revenue generated for over a minute.");
         }
     }
 
@@ -113,8 +128,11 @@ public class GameManager : MonoBehaviour
         {
             if (node == null) continue;
             if (node.nodeData == null) continue;
-            if (node.nodeData.nodeType == NodeType.Service && !node.IsCompromised)
-                return true;
+            if (node.nodeData.nodeType != NodeType.Service) continue;
+            if (node.IsCompromised) continue;
+            if (ConnectionManager.Instance == null) continue;
+            if (!ConnectionManager.Instance.IsChainIntact(node)) continue;
+            return true;
         }
         return false;
     }

@@ -49,6 +49,10 @@ public class ThreatManager : MonoBehaviour
     [Header("Damage")]
     public int damagePerBreach = 40;
 
+    [Header("Grace Period")]
+    [Tooltip("Seconds at game start during which no attacks fire.")]
+    public float initialGracePeriod = 10f;
+
     [Header("Firewall")]
     [Range(0f, 1f)] public float firewallReduction = 0.25f;
     // Each connection beyond the first erodes a firewall's protection by this much. Capped at zero net reduction.
@@ -91,7 +95,8 @@ public class ThreatManager : MonoBehaviour
 
     private void Start()
     {
-        ScheduleNextAttack();
+        // First attack waits the full grace period plus a normal interval.
+        nextAttackTime = Time.time + initialGracePeriod + Random.Range(minAttackInterval, maxAttackInterval);
     }
 
     private void ApplyStage(int stage)

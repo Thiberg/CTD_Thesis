@@ -59,11 +59,13 @@ Assets/Scripts/
  DeleteZone.cs
  DirectionPopup.cs
  DragableItem.cs
+ EndScreenController.cs
  GameManager.cs
  HUDController.cs
  MessageData.cs
  MessageInboxUI.cs
  MessageManager.cs
+ MetricRowUI.cs
  MetricsTracker.cs
  NodeConnection.cs
  NodeData.cs
@@ -71,6 +73,7 @@ Assets/Scripts/
  NotificationBadge.cs
  PlacementSpot.cs
  RevenueManager.cs
+ SessionIdentity.cs
  StageManager.cs
  ThreatManager.cs
  UIAppController.cs
