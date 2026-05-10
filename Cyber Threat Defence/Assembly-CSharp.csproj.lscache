@@ -48,6 +48,7 @@ Assets/Scripts/
  DirectionPopup.cs
  DragableItem.cs
  EndScreenController.cs
+ FirebaseUploader.cs
  GameManager.cs
  HUDController.cs
  MessageData.cs
