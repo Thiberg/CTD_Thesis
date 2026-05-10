@@ -42,10 +42,11 @@ public class FirebaseUploader : MonoBehaviour
 
     private IEnumerator PostToFirebase(MetricsTracker.FinalScore s, string outcome, string reason)
     {
-        string url  = $"{firebaseDatabaseUrl.TrimEnd('/')}/{collectionName}.json";
+        string sessionId = SessionIdentity.CurrentSessionId;
+        string url  = $"{firebaseDatabaseUrl.TrimEnd('/')}/{collectionName}/{sessionId}.json";
         string body = BuildBody(s, outcome, reason);
 
-        UnityWebRequest req = new(url, "POST")
+        UnityWebRequest req = new(url, "PUT")
         {
             uploadHandler   = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body)),
             downloadHandler = new DownloadHandlerBuffer()
@@ -55,7 +56,7 @@ public class FirebaseUploader : MonoBehaviour
         yield return req.SendWebRequest();
 
         if (req.result == UnityWebRequest.Result.Success)
-            Debug.Log($"[Firebase] Session {SessionIdentity.CurrentSessionId} uploaded ({outcome})");
+            Debug.Log($"[Firebase] Session {sessionId} uploaded ({outcome})");
         else
             Debug.LogError($"[Firebase] Upload failed: {req.error} | {req.downloadHandler.text}");
     }
