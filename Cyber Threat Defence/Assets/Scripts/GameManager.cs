@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
 
     private float noRevenueTimer;
     private bool hasEverEarned;
+    private bool firstNodePlaced;
 
     public float Balance { get; private set; }
     public float Reputation { get; private set; }
@@ -56,6 +57,7 @@ public class GameManager : MonoBehaviour
     {
         if (!GameActive) return;
         if (OnboardingController.Instance != null && OnboardingController.Instance.IsActive) return;
+        if (!firstNodePlaced) return;
 
         TimeRemaining -= Time.deltaTime;
         OnTimerChanged?.Invoke(TimeRemaining);
@@ -93,7 +95,10 @@ public class GameManager : MonoBehaviour
     public void RegisterNode(DragableItem node)
     {
         if (!PlacedNodes.Contains(node))
+        {
             PlacedNodes.Add(node);
+            firstNodePlaced = true;
+        }
     }
 
     public void UnregisterNode(DragableItem node)
