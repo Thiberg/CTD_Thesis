@@ -39,6 +39,7 @@ public class GameManager : MonoBehaviour
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
+        SessionIdentity.StartNewSession();
     }
 
     private void Start()
@@ -117,11 +118,15 @@ public class GameManager : MonoBehaviour
         bool earning = HasAnyEarningService();
         if (earning)
         {
+            if (noRevenueTimer > 0f && hasEverEarned)
+                Debug.Log($"[GameManager] Revenue resumed (was {noRevenueTimer:0.0}s without)");
             hasEverEarned = true;
             noRevenueTimer = 0f;
         }
         else if (hasEverEarned)
         {
+            if (noRevenueTimer == 0f)
+                Debug.Log($"[GameManager] No revenue — game over in {noRevenueLoseThreshold:0}s if not resumed");
             noRevenueTimer += Time.deltaTime;
             if (noRevenueTimer >= noRevenueLoseThreshold)
                 TriggerGameOver("Operations stalled — no revenue generated for over a minute.");

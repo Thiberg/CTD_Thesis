@@ -27,6 +27,15 @@ public class EndScreenController : MonoBehaviour
 
     [Header("Actions")]
     public Button restartButton;
+    public Button questionnaireButton;
+
+    [Header("Views (toggled by Start Questionnaire button)")]
+    [Tooltip("Container holding the metrics breakdown — shown by default after game ends.")]
+    public GameObject metricsView;
+    [Tooltip("Container holding the session IDs view — shown when Start Questionnaire is clicked.")]
+    public GameObject sessionIdsView;
+    [Tooltip("TMP that lists all stored session IDs.")]
+    public TextMeshProUGUI sessionIdsListText;
 
     [Header("Copy")]
     [TextArea(2, 4)] public string winHeader = "Network Secured";
@@ -37,6 +46,7 @@ public class EndScreenController : MonoBehaviour
     {
         if (panelRoot != null) panelRoot.SetActive(false);
         if (restartButton != null) restartButton.onClick.AddListener(OnRestart);
+        if (questionnaireButton != null) questionnaireButton.onClick.AddListener(OnQuestionnaireClicked);
     }
 
     private void OnEnable()
@@ -56,6 +66,7 @@ public class EndScreenController : MonoBehaviour
         if (headerText != null)    headerText.text    = winHeader;
         if (subHeaderText != null) subHeaderText.text = winSubHeader;
         PopulateMetrics();
+        ShowMetricsView();
         if (panelRoot != null) panelRoot.SetActive(true);
     }
 
@@ -64,7 +75,35 @@ public class EndScreenController : MonoBehaviour
         if (headerText != null)    headerText.text    = loseHeader;
         if (subHeaderText != null) subHeaderText.text = reason;
         PopulateMetrics();
+        ShowMetricsView();
         if (panelRoot != null) panelRoot.SetActive(true);
+    }
+
+    private void ShowMetricsView()
+    {
+        if (metricsView != null)    metricsView.SetActive(true);
+        if (sessionIdsView != null) sessionIdsView.SetActive(false);
+    }
+
+    private void OnQuestionnaireClicked()
+    {
+        if (metricsView != null)    metricsView.SetActive(false);
+        if (sessionIdsView != null) sessionIdsView.SetActive(true);
+
+        if (sessionIdsListText != null)
+        {
+            var ids = SessionIdentity.GetAllSessionIds();
+            if (ids.Count == 0)
+            {
+                sessionIdsListText.text = "(no sessions recorded)";
+            }
+            else
+            {
+                System.Text.StringBuilder sb = new();
+                foreach (string id in ids) sb.AppendLine(id);
+                sessionIdsListText.text = sb.ToString();
+            }
+        }
     }
 
     private void PopulateMetrics()
