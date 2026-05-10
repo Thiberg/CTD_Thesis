@@ -39,11 +39,18 @@ public class MessageManager : MonoBehaviour
     private void Start()
     {
         ScheduleNextSpawn();
+        OnboardingController.OnOnboardingCompleted += ScheduleNextSpawn;
+    }
+
+    private void OnDestroy()
+    {
+        OnboardingController.OnOnboardingCompleted -= ScheduleNextSpawn;
     }
 
     private void Update()
     {
         if (GameManager.Instance == null || !GameManager.Instance.GameActive) return;
+        if (OnboardingController.Instance != null && OnboardingController.Instance.IsActive) return;
         if (messagePool.Count == 0) return;
         if (Time.time < nextSpawnTime) return;
 

@@ -71,6 +71,7 @@ Assets/Scripts/
  NodeData.cs
  NodeInspectorPanel.cs
  NotificationBadge.cs
+ OnboardingController.cs
  PlacementSpot.cs
  RevenueManager.cs
  SessionIdentity.cs

@@ -55,6 +55,7 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         if (!GameActive) return;
+        if (OnboardingController.Instance != null && OnboardingController.Instance.IsActive) return;
 
         TimeRemaining -= Time.deltaTime;
         OnTimerChanged?.Invoke(TimeRemaining);

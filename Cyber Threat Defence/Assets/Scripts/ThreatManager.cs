@@ -97,6 +97,17 @@ public class ThreatManager : MonoBehaviour
     {
         // First attack waits the full grace period plus a normal interval.
         nextAttackTime = Time.time + initialGracePeriod + Random.Range(minAttackInterval, maxAttackInterval);
+        OnboardingController.OnOnboardingCompleted += RescheduleFromNow;
+    }
+
+    private void OnDestroy()
+    {
+        OnboardingController.OnOnboardingCompleted -= RescheduleFromNow;
+    }
+
+    private void RescheduleFromNow()
+    {
+        nextAttackTime = Time.time + initialGracePeriod + Random.Range(minAttackInterval, maxAttackInterval);
     }
 
     private void ApplyStage(int stage)
@@ -123,6 +134,7 @@ public class ThreatManager : MonoBehaviour
     private void Update()
     {
         if (GameManager.Instance == null || !GameManager.Instance.GameActive) return;
+        if (OnboardingController.Instance != null && OnboardingController.Instance.IsActive) return;
 
         for (int i = activeAttacks.Count - 1; i >= 0; i--)
         {
