@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+// Inbox panel: lists incoming mails (newest first), shows the selected mail's body,
+// and routes Reply/Report clicks to MessageManager.
 public class MessageInboxUI : MonoBehaviour
 {
     [Header("Inbox List")]

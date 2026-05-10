@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Computes the seven weighted end-of-game metrics on demand from current game state.
+// Each metric outputs 0..1; total is a weighted average. Pure query — no event subscriptions,
+// no per-frame work — called by EndScreenController and FirebaseUploader on game end.
 public class MetricsTracker : MonoBehaviour
 {
     public static MetricsTracker Instance { get; private set; }
@@ -50,34 +53,6 @@ public class MetricsTracker : MonoBehaviour
         Instance = this;
     }
 
-    private void OnEnable()
-    {
-        GameManager.OnGameWon  += HandleWin;
-        GameManager.OnGameOver += HandleLose;
-    }
-
-    private void OnDisable()
-    {
-        GameManager.OnGameWon  -= HandleWin;
-        GameManager.OnGameOver -= HandleLose;
-    }
-
-    private void HandleWin() => LogFinalScore("WIN");
-    private void HandleLose(string _) => LogFinalScore("LOSE");
-
-    private void LogFinalScore(string label)
-    {
-        FinalScore s = Compute();
-        Debug.Log($"=== Final Metrics ({label}) ===");
-        Debug.Log($"Credential uniqueness:  {s.credentialUniqueness:P0}  weighted {s.credentialUniqueness * weightCredentialUniqueness:P0}");
-        Debug.Log($"Critical protection:    {s.criticalProtection:P0}  weighted {s.criticalProtection * weightCriticalProtection:P0}");
-        Debug.Log($"Firewall load:          {s.firewallLoad:P0}  weighted {s.firewallLoad * weightFirewallLoad:P0}");
-        Debug.Log($"Revenue rate:           {s.revenueRate:P0}  weighted {s.revenueRate * weightRevenue:P0}");
-        Debug.Log($"Reputation:             {s.reputation:P0}  weighted {s.reputation * weightReputation:P0}");
-        Debug.Log($"Phishing accuracy:      {s.phishingAccuracy:P0}  weighted {s.phishingAccuracy * weightPhishing:P0}");
-        Debug.Log($"Company value:          {s.companyValue:P0}  weighted {s.companyValue * weightCompanyValue:P0}");
-        Debug.Log($"TOTAL SCORE:            {s.totalScore:P0}");
-    }
 
     public FinalScore Compute()
     {

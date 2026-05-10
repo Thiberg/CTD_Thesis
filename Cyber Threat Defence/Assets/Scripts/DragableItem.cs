@@ -3,6 +3,9 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
 
+// Per-node behaviour: drag/drop, click-to-inspect, color modulation by state, and the
+// canonical damage entry point (ApplyDamage). Per-instance stat fields (CurrentMaxHealth,
+// CurrentSecurityLevel, etc.) start from nodeData and grow with upgrades.
 public class DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
 {
     public Image image;

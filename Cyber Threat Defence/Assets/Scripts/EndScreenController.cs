@@ -3,6 +3,9 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 
+// Win/lose screen controller. Listens to GameManager events, populates the metrics view
+// with MetricsTracker.Compute(), and toggles to a Session-IDs view when the player clicks
+// Start Questionnaire. Restart reloads the active scene.
 public class EndScreenController : MonoBehaviour
 {
     [Header("Panel")]

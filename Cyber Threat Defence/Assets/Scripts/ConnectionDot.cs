@@ -1,7 +1,9 @@
 using UnityEngine.EventSystems;
 using UnityEngine;
 
-// Attach this to every "Connection node" child of a Placement tile prefab.
+// Drag handler on each gateway dot. Attach to every "Connection node" child of a
+// Placement tile prefab. Coordinates with ConnectionManager to draw a ghost line during
+// drag and finalise the connection on drop.
 public class ConnectionDot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
 {
     // The Placement tile hierarchy: Placement tile → [In-game container (PlacementSpot), Connection nodes…]

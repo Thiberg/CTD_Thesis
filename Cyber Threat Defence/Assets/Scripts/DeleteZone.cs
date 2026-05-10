@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+// Drag-to-delete tile. Refunds via DragableItem.GetSellRefund (60% of total invested
+// for healthy nodes, 10% for compromised).
 public class DeleteZone : MonoBehaviour, IDropHandler
 {
     public void OnDrop(PointerEventData eventData)

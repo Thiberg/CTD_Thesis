@@ -2,6 +2,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+// Shown after node placement. Lets the player pick "Generate New Password ($50)" or
+// "Use Last Password" (free). Falls back to a free unique credential if the player
+// can't afford new and has no last password to reuse.
 public class CredentialPopup : MonoBehaviour
 {
     public static CredentialPopup Instance { get; private set; }

@@ -1,6 +1,8 @@
 using UnityEngine;
 using TMPro;
 
+// Subscribes to GameManager events and pushes the visible balance, reputation, and
+// timer strings to TMP labels in the HUD.
 public class HUDController : MonoBehaviour
 {
     [Header("HUD Text Fields")]

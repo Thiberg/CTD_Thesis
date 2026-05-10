@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// DOT manager for credential leaks. When a node compromises, every other healthy member
+// of its credential group starts taking damage per tick until it is itself compromised
+// or its password is rotated. Tracks total leak damage and node losses for the metrics.
 public class CredentialLeakManager : MonoBehaviour
 {
     public static CredentialLeakManager Instance { get; private set; }

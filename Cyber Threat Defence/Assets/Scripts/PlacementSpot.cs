@@ -2,6 +2,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+// Drop target on the grid. On first placement: deducts cost, registers with GameManager,
+// shows the credential popup. Polls its child node every Update to swap container sprite
+// based on healthy / under-attack / compromised state.
 public class PlacementSpot : MonoBehaviour, IDropHandler, IPointerClickHandler
 {
     [Header("Container Visuals")]

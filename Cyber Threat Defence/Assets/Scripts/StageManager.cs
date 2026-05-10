@@ -1,6 +1,9 @@
 using System;
 using UnityEngine;
 
+// Tracks the current stage based on TimeRemaining and fires OnStageChanged on transitions.
+// ThreatManager subscribes to apply per-stage scheduling/weights; MessageManager filters
+// the mail pool to stage-eligible entries.
 public class StageManager : MonoBehaviour
 {
     public static StageManager Instance { get; private set; }

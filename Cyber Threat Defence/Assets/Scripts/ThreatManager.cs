@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Schedules attacks, picks targets via weighted RNG (firewalls are never directly picked),
+// rolls breach chance, and routes successful breach damage to a connected firewall when
+// one exists. StageConfig overrides scheduling, weights, and breach probability per stage.
 public class ThreatManager : MonoBehaviour
 {
     [System.Serializable]

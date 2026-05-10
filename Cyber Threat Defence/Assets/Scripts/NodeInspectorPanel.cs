@@ -3,6 +3,9 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using TMPro;
 
+// Right-side info panel that appears on node click. Shows live stats (HP, security,
+// type-specific status) and exposes Sell, Upgrade, and Change Password actions.
+// Auto-hides when the player clicks outside the panel.
 public class NodeInspectorPanel : MonoBehaviour
 {
     [Header("Panel Root")]

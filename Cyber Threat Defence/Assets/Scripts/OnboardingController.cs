@@ -3,6 +3,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+// Walks the player through the introductory screens. Each screen shows text plus optional
+// arrow GameObjects pointing at relevant UI. While IsActive is true, ThreatManager and
+// MessageManager don't spawn anything and the GameManager session timer is paused.
 public class OnboardingController : MonoBehaviour
 {
     public static OnboardingController Instance { get; private set; }

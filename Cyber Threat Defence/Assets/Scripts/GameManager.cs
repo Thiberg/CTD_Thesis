@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Central game state. Owns balance, reputation, the session timer, the placed-node registry,
+// the win/lose conditions, and the static events the HUD subscribes to. Pauses during
+// onboarding and before the first node is placed.
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
@@ -115,18 +118,16 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        // No-revenue lose timer: only counts after the player has earned at least once,
+        // so the early-game setup phase isn't punished.
         bool earning = HasAnyEarningService();
         if (earning)
         {
-            if (noRevenueTimer > 0f && hasEverEarned)
-                Debug.Log($"[GameManager] Revenue resumed (was {noRevenueTimer:0.0}s without)");
             hasEverEarned = true;
             noRevenueTimer = 0f;
         }
         else if (hasEverEarned)
         {
-            if (noRevenueTimer == 0f)
-                Debug.Log($"[GameManager] No revenue — game over in {noRevenueLoseThreshold:0}s if not resumed");
             noRevenueTimer += Time.deltaTime;
             if (noRevenueTimer >= noRevenueLoseThreshold)
                 TriggerGameOver("Operations stalled — no revenue generated for over a minute.");

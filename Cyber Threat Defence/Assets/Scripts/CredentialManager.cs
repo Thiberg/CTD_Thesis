@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Tracks which credential group ID each placed node belongs to. Lifetime counters here
+// (PlacementUniques, MidGameRotations, SharedToUniqueRotations, TotalActivations) feed
+// MetricsTracker's credential-uniqueness scoring.
 public class CredentialManager : MonoBehaviour
 {
     public static CredentialManager Instance { get; private set; }

@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// ScriptableObject defining a node type's economy (cost, revenue, upkeep), combat
+// stats (HP, security), and per-tier upgrade configs.
 public enum NodeType { Service, Server, Database, Firewall }
 
 [System.Serializable]

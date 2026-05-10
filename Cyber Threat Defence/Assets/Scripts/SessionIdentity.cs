@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Static helper that issues a fresh 8-character ID per playthrough and accumulates them
+// in memory. Cleared on browser refresh / Unity stop+play (no persistent storage —
+// this is intentional so each tester sees only their current browser-session IDs).
 public static class SessionIdentity
 {
     private const string SAFE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // no 0/O/1/I/l

@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Owns all node-to-node connection lines. Handles drag-to-connect via ConnectionDot,
+// renders lines as UI Images, and exposes graph queries used by ThreatManager and RevenueManager
+// (IsChainIntact, GetConnectedNodes, GetConnectionCount).
 public class ConnectionManager : MonoBehaviour
 {
     public static ConnectionManager Instance { get; private set; }
@@ -11,12 +14,9 @@ public class ConnectionManager : MonoBehaviour
     [SerializeField] private RectTransform connectionsParent;
 
     [Header("Appearance")]
-    [SerializeField] private Color twoWayColor = new Color(0.4f, 0.85f, 1f, 1f);
-    [SerializeField] private Color oneWayColor = new Color(0.4f, 1f, 0.55f, 1f);
+    [SerializeField] private Color lineColor = new Color(0.4f, 0.85f, 1f, 1f);
     [SerializeField] private float lineThickness = 22f;
 
-    public Color TwoWayColor => twoWayColor;
-    public Color OneWayColor  => oneWayColor;
     public RectTransform ConnectionsParent => connectionsParent;
 
     private ConnectionDot  pendingFrom;
@@ -69,12 +69,11 @@ public class ConnectionManager : MonoBehaviour
         }
     }
 
+    // Reactive line tinting: red when breached, pulsing red while under attack, base colour otherwise.
     private void UpdateLineColor(NodeConnection conn)
     {
         Image img = conn.LineObject.GetComponent<Image>();
         if (img == null) return;
-
-        Color baseColor = conn.Direction == ConnectionDirection.TwoWay ? twoWayColor : oneWayColor;
 
         bool breached = conn.NodeA.IsCompromised || conn.NodeB.IsCompromised;
         if (breached) { img.color = Color.red; return; }
@@ -83,11 +82,11 @@ public class ConnectionManager : MonoBehaviour
         if (attacked)
         {
             float t = (Mathf.Sin(Time.time * 6f) + 1f) * 0.5f;
-            img.color = Color.Lerp(baseColor, Color.red, t);
+            img.color = Color.Lerp(lineColor, Color.red, t);
             return;
         }
 
-        img.color = baseColor;
+        img.color = lineColor;
     }
 
     // ── Connection flow ──────────────────────────────────────────────────────
@@ -138,7 +137,7 @@ public class ConnectionManager : MonoBehaviour
         lineGO.transform.SetParent(connectionsParent, false);
 
         Image img = lineGO.AddComponent<Image>();
-        img.color        = twoWayColor;
+        img.color        = lineColor;
         img.raycastTarget = false;
 
         RectTransform rt = lineGO.GetComponent<RectTransform>();
@@ -147,8 +146,6 @@ public class ConnectionManager : MonoBehaviour
         Vector2 posA = ScreenPos(nodeA.GetComponent<RectTransform>());
         Vector2 posB = ScreenPos(nodeB.GetComponent<RectTransform>());
         SetLineBetween(rt, posA, posB);
-
-        DirectionPopup.Instance?.Show(conn);
     }
 
     public void RemoveConnectionsFor(DragableItem node)

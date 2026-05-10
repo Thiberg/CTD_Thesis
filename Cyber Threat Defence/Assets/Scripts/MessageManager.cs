@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Spawns mails on a randomised interval, tracks correct/incorrect responses (separately
+// counts phishing-only for the metric), and filters the pool by current stage so phishing
+// difficulty escalates over time. Wrong answers cost reputation.
 public class MessageManager : MonoBehaviour
 {
     public static MessageManager Instance { get; private set; }

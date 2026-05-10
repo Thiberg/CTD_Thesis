@@ -1,5 +1,8 @@
 using UnityEngine;
 
+// Per-second tick: pays Services with intact chains and deducts upkeep — per-connection
+// for firewalls, flat for upgraded servers/databases. Tracks total revenue earned for
+// the revenue-rate metric.
 public class RevenueManager : MonoBehaviour
 {
     public static RevenueManager Instance { get; private set; }

@@ -1,5 +1,7 @@
 using UnityEngine;
 
+// ScriptableObject for a single mail. Stage 0 = always eligible; 1/2/3 = eligible from
+// that stage onwards (so stage-1 phishing keeps appearing later, alongside subtler ones).
 public enum MessageType { Normal, Phishing }
 public enum MessageAction { Reply, Report }
 

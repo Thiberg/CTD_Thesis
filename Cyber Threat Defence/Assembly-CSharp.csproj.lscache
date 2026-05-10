@@ -45,7 +45,6 @@ Assets/Scripts/
  CredentialManager.cs
  CredentialPopup.cs
  DeleteZone.cs
- DirectionPopup.cs
  DragableItem.cs
  EndScreenController.cs
  FirebaseUploader.cs
@@ -54,7 +53,6 @@ Assets/Scripts/
  MessageData.cs
  MessageInboxUI.cs
  MessageManager.cs
- MetricRowUI.cs
  MetricsTracker.cs
  NodeConnection.cs
  NodeData.cs

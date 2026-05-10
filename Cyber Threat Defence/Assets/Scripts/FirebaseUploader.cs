@@ -5,6 +5,9 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 
+// Uploads end-of-game metrics + outcome to Firebase Realtime Database via REST API.
+// Uses PUT with the player's session ID as the document key, so Firebase entries are
+// keyed by the same short ID shown to the player on the questionnaire screen.
 public class FirebaseUploader : MonoBehaviour
 {
     [Header("Firebase Config")]

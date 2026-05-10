@@ -1,5 +1,7 @@
 using UnityEngine;
 
+// Toggles the messaging panel open/closed, and hides the connections layer while the
+// inbox is open so it doesn't render on top of the panel.
 public class UIAppController : MonoBehaviour
 {
     public GameObject messagingPanel;
