@@ -74,6 +74,8 @@ public class FirebaseUploader : MonoBehaviour
         if (!string.IsNullOrEmpty(reason))
             sb.Append($"\"loseReason\":\"{Escape(reason)}\",");
         sb.Append($"\"timestamp\":\"{DateTime.UtcNow:yyyy-MM-ddTHH:mm:ssZ}\",");
+        float timeLeft = GameManager.Instance != null ? GameManager.Instance.TimeRemaining : 0f;
+        sb.Append($"\"timeRemainingSeconds\":{timeLeft.ToString("0.00", ci)},");
         sb.Append($"\"credentialUniqueness\":{s.credentialUniqueness.ToString("0.0000", ci)},");
         sb.Append($"\"criticalProtection\":{s.criticalProtection.ToString("0.0000", ci)},");
         sb.Append($"\"firewallLoad\":{s.firewallLoad.ToString("0.0000", ci)},");

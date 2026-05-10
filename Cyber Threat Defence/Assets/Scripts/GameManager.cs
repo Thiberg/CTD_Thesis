@@ -130,7 +130,7 @@ public class GameManager : MonoBehaviour
         {
             noRevenueTimer += Time.deltaTime;
             if (noRevenueTimer >= noRevenueLoseThreshold)
-                TriggerGameOver("Operations stalled — no revenue generated for over a minute.");
+                TriggerGameOver("Operations stalled, no revenue generated for over a minute.");
         }
     }
 

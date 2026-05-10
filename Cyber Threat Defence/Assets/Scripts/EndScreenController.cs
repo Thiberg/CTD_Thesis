@@ -131,11 +131,11 @@ public class EndScreenController : MonoBehaviour
 
     private static string SummariseTotal(float total)
     {
-        if (total >= 0.85f) return "Exemplary architect — the network would inspire textbooks.";
-        if (total >= 0.65f) return "Strong work — you held the line through escalating threats.";
-        if (total >= 0.45f) return "Mixed performance — clear strengths, clear room to grow.";
-        if (total >= 0.25f) return "Architecture under strain — the systems learned a hard lesson.";
-        return "Crisis mode — most decisions tilted reactive over structural.";
+        if (total >= 0.85f) return "Exemplary architect, the network would inspire textbooks.";
+        if (total >= 0.65f) return "Strong work, you held the line through escalating threats.";
+        if (total >= 0.45f) return "Mixed performance, clear strengths and clear room to grow.";
+        if (total >= 0.25f) return "Architecture under strain, the systems learned a hard lesson.";
+        return "Crisis mode, most decisions tilted reactive over structural.";
     }
 
     private void OnRestart()
