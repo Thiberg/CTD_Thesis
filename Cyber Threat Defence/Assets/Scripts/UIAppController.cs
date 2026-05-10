@@ -7,10 +7,18 @@ public class UIAppController : MonoBehaviour
     public void OpenMessagingApp()
     {
         messagingPanel.SetActive(true);
+        SetConnectionsVisible(false);
     }
 
     public void CloseMessagingApp()
     {
         messagingPanel.SetActive(false);
+        SetConnectionsVisible(true);
+    }
+
+    private static void SetConnectionsVisible(bool visible)
+    {
+        RectTransform cp = ConnectionManager.Instance?.ConnectionsParent;
+        if (cp != null) cp.gameObject.SetActive(visible);
     }
 }

@@ -17,6 +17,7 @@ public class ConnectionManager : MonoBehaviour
 
     public Color TwoWayColor => twoWayColor;
     public Color OneWayColor  => oneWayColor;
+    public RectTransform ConnectionsParent => connectionsParent;
 
     private ConnectionDot  pendingFrom;
     public  bool           IsPending => pendingFrom != null;
